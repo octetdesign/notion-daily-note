@@ -1,7 +1,8 @@
 import * as vscode from 'vscode'
 import { Client } from '@notionhq/client'
-import { format } from 'date-fns'
 import { BlockObjectRequest } from '@notionhq/client/build/src/api-endpoints'
+import { format } from 'date-fns'
+import { ja } from 'date-fns/locale'
 import { generateContent } from './content'
 import { getLanguage } from './language'
 
@@ -78,7 +79,7 @@ export const writeToNotion = async (commandType: 'text' | 'codeBlock') => {
     })
 
     let pageId: string
-    const today = format(new Date(), dateFormat)
+    const today = format(new Date(), dateFormat, { locale: ja })
     const pageTitle = today
     if (datePage) {
       // 既存のページが見つかった場合

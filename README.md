@@ -35,6 +35,8 @@ Notion のサイトで VS Code と Notion を連携させるために必要な�
 
 Notion Daily Note の設定項目です。
 
-- `notion-daily-note.apiKey`: Notion の API キーを設定します。（必須）
-- `notion-daily-note.databasePageUrl`: データベースページの URL を指定します。（必須）
-- `notion-daily-note.dateFormat`: 日付のフォーマットを指定します。
+- `notion-daily-note.apiKey`: Notion の API キーを設定します。
+- `notion-daily-note.databasePageUrl`: データベースページの URL を指定します。
+- `notion-daily-note.writeDateTime`: テキストと一緒に日時を書き込みます。
+- `notion-daily-note.dateFormat`: 日付のフォーマット。ページのタイトルに使用されます。 ※書式： https://date-fns.org/v4.1.0/docs/format
+- `notion-daily-note.dateTimeFormat`: 日時のフォーマット。日時を書き込む際に使用されます。 ※書式： https://date-fns.org/v4.1.0/docs/format
