@@ -1,6 +1,7 @@
 import { format } from 'date-fns'
 import { ja } from 'date-fns/locale'
 import { BlockObjectRequest } from '@notionhq/client/build/src/api-endpoints'
+import { ApiColor } from './writeToNotion'
 
 /**
  * 書き込むコンテンツを生成する
@@ -9,18 +10,19 @@ import { BlockObjectRequest } from '@notionhq/client/build/src/api-endpoints'
  */
 export const generateContent = (props: {
   dateFormat: string
-  dateTimeFormat: string
+  timestampFormat: string
   text: string
   commandType?: 'text' | 'codeBlock'
   language?: string
   fileName?: string
-  writeDateTime?: boolean
+  writeTimestamp?: boolean
+  timestampColor?: ApiColor
 }) => {
   const children: BlockObjectRequest[] = []
 
-  // 日時
-  if (props.writeDateTime) {
-    const datetime: BlockObjectRequest = {
+  // タイムスタンプ
+  if (props.writeTimestamp) {
+    const timestamp: BlockObjectRequest = {
       object: 'block',
       type: 'paragraph',
       paragraph: {
@@ -28,14 +30,14 @@ export const generateContent = (props: {
           {
             type: 'text',
             text: {
-              content: `${format(new Date(), props.dateTimeFormat, { locale: ja })}`,
+              content: `${format(new Date(), props.timestampFormat, { locale: ja })}`,
             },
           },
         ],
-        color: 'yellow_background',
+        color: props.timestampColor,
       },
     }
-    children.push(datetime)
+    children.push(timestamp)
   }
 
   // コンテンツ
@@ -50,8 +52,6 @@ export const generateContent = (props: {
  * @returns
  */
 const generateBlock = (props: {
-  dateFormat: string
-  dateTimeFormat: string
   text: string
   language?: string
   fileName?: string

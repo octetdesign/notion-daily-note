@@ -7,6 +7,31 @@ import { generateContent } from './content'
 import { getLanguage } from './language'
 
 /**
+ * ブロックの色
+ * NOTE: 右記から転記 node_modules/@notionhq/client/build/src/api-endpoints.d.ts
+ * */
+export type ApiColor =
+  | 'default'
+  | 'gray'
+  | 'brown'
+  | 'orange'
+  | 'yellow'
+  | 'green'
+  | 'blue'
+  | 'purple'
+  | 'pink'
+  | 'red'
+  | 'gray_background'
+  | 'brown_background'
+  | 'orange_background'
+  | 'yellow_background'
+  | 'green_background'
+  | 'blue_background'
+  | 'purple_background'
+  | 'pink_background'
+  | 'red_background'
+
+/**
  * 選択範囲のテキストをNotionに書き込む
  *
  * @param commandType 'text' | 'codeBlock'
@@ -18,10 +43,11 @@ export const writeToNotion = async (commandType: 'text' | 'codeBlock') => {
   const apiKey = config.get<string>('apiKey')
   const databasePageUrl = config.get<string>('databasePageUrl')
   const dateFormat = config.get<string>('dateFormat', 'yyyy/MM/dd(eee)')
-  const dateTimeFormat = config.get<string>('dateTimeFormat', 'yyyy/MM/dd(eee) HH:mm:ss')
-  const writeDateTime = config.get<boolean>('writeDateTime', true)
+  const timestampFormat = config.get<string>('timestampFormat', 'yyyy/MM/dd(eee) HH:mm:ss')
+  const writeTimestamp = config.get<boolean>('writeTimestamp', true)
+  const timestampColor = config.get<ApiColor>('timestampColor', 'yellow_background')
 
-  // console.log('config', { apiKey, databasePageUrl, dateFormat, writeDatetime })
+  // console.log('config', { apiKey, databasePageUrl, dateFormat, timestampFormat, writeTimestamp, timestampColor })
 
   if (!apiKey || !databasePageUrl) {
     vscode.window.showErrorMessage(
@@ -70,11 +96,12 @@ export const writeToNotion = async (commandType: 'text' | 'codeBlock') => {
     const document = vscode.window.activeTextEditor?.document
     const children: BlockObjectRequest[] = generateContent({
       dateFormat,
-      dateTimeFormat,
+      timestampFormat,
+      timestampColor,
       text: selectedText,
       language: getLanguage(document?.languageId),
       fileName: document?.fileName,
-      writeDateTime,
+      writeTimestamp,
       commandType,
     })
 

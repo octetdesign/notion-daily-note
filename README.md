@@ -4,9 +4,18 @@
 
 ## 特徴
 
-- テキストエディタで選択した文字を Notion ページに書き込みます。
-- 書き込む先の Notion ページは日付毎に自動作成されます。（カレンダービューのデータベースに日付毎のページが自動作成される。）
-- 書き込む内容の前に日時が挿入されます。
+- エディタで選択したテキストを Notion ページに書き込みます。
+- 書き込む先の Notion ページは日付毎に自動作成されます。（カレンダービューのデータベースに日付毎のページが自動追加されます。）
+- 選択したテキストを通常のテキストまたはコードブロックで書き込むことができます。
+- テキストと一緒にタイムスタンプを書き込むことができます。
+
+## 使い方
+
+1. エディタでテキストを選択してコマンドパレットから以下のコマンドを実行します。
+   - `選択範囲をNotionに書き込む`: エディタで選択したテキストを Notion ページに書き込みます。
+   - `選択範囲をコードブロックでNotionに書き込む`: エディタで選択したテキストをコードブロックで Notion ページに書き込みます。
+1. 日付毎の Notion ページが作成され、テキストまたはコードブロックが書き込まれます。
+   - 日付が変わるまでは同じページにテキストが追加されます。
 
 ## 設定
 
@@ -37,6 +46,7 @@ Notion Daily Note の設定項目です。
 
 - `notion-daily-note.apiKey`: Notion の API キーを設定します。
 - `notion-daily-note.databasePageUrl`: データベースページの URL を指定します。
-- `notion-daily-note.writeDateTime`: テキストと一緒に日時を書き込みます。
+- `notion-daily-note.writeTimestamp`: テキストと一緒にタイムスタンプを書き込みます。
+- `notion-daily-note.timestampColor`": タイムスタンプの色。
 - `notion-daily-note.dateFormat`: 日付のフォーマット。ページのタイトルに使用されます。 ※書式： https://date-fns.org/v4.1.0/docs/format
-- `notion-daily-note.dateTimeFormat`: 日時のフォーマット。日時を書き込む際に使用されます。 ※書式： https://date-fns.org/v4.1.0/docs/format
+- `notion-daily-note.timestampFormat`: タイムスタンプのフォーマット。 ※書式： https://date-fns.org/v4.1.0/docs/format
