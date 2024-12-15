@@ -49,27 +49,35 @@
       }
     ],
     "configuration": {
-      "title": "Notion Daily Note",
+      "title": "NotionDailyNote",
       "properties": {
         "notion-daily-note.apiKey": {
+          "order": 10,
+          "required": true,
           "type": "string",
           "description": "Notion API キー"
         },
         "notion-daily-note.databasePageUrl": {
+          "order": 20,
+          "required": true,
           "type": "string",
           "description": "データベースページのURL"
         },
         "notion-daily-note.writeDateTime": {
+          "order": 30,
           "type": "boolean",
-          "description": "テキストを書き込む際、日時も書き込む。",
+          "description": "テキストと一緒に日時を書き込みます。",
           "default": true
         },
         "notion-daily-note.dateFormat": {
+          "order": 40,
+          "required": true,
           "type": "string",
           "description": "日付のフォーマット。ページのタイトルに使用されます。 ※書式： https://date-fns.org/v4.1.0/docs/format",
           "default": "yyyy/MM/dd(eee)"
         },
         "notion-daily-note.dateTimeFormat": {
+          "order": 50,
           "type": "string",
           "description": "日時のフォーマット。日時を書き込む際に使用されます。 ※書式： https://date-fns.org/v4.1.0/docs/format",
           "default": "yyyy/MM/dd(eee) HH:mm:ss"
