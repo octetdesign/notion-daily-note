@@ -1,0 +1,109 @@
+{
+  "name": "notion-daily-note",
+  "displayName": "Notion Daily Note",
+  "version": "0.0.2",
+  "publisher": "octetdesign",
+  "description": "選択範囲のテキストを日付毎の Notion ページに書き込む Visual Studio Code の機能拡張です。",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "author": {
+    "name": "OCTET DESIGN"
+  },
+  "categories": [
+    "Other"
+  ],
+  "pricing": "Free",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/octetdesign/notion-daily-note.git"
+  },
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "notion-daily-note.writeText",
+        "title": "選択範囲をNotionに書き込む",
+        "category": "Notion Daily Note"
+      },
+      {
+        "command": "notion-daily-note.writeCodeBlock",
+        "title": "選択範囲をコードブロックでNotionに書き込む",
+        "category": "Notion Daily Note"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "notion-daily-note.writeText",
+        "mac": "cmd+alt+n",
+        "win": "ctrl+alt+n",
+        "linux": "ctrl+alt+n"
+      },
+      {
+        "command": "notion-daily-note.writeCodeBlock",
+        "mac": "cmd+alt+b",
+        "win": "ctrl+alt+b",
+        "linux": "ctrl+alt+b"
+      }
+    ],
+    "configuration": {
+      "title": "Notion Daily Note",
+      "properties": {
+        "notion-daily-note.apiKey": {
+          "type": "string",
+          "description": "Notion API キー"
+        },
+        "notion-daily-note.databasePageUrl": {
+          "type": "string",
+          "description": "データベースページのURL"
+        },
+        "notion-daily-note.writeDateTime": {
+          "type": "boolean",
+          "description": "テキストを書き込む際、日時も書き込む。",
+          "default": true
+        },
+        "notion-daily-note.dateFormat": {
+          "type": "string",
+          "description": "日付のフォーマット。ページのタイトルに使用されます。 ※書式： https://date-fns.org/v4.1.0/docs/format",
+          "default": "yyyy/MM/dd(eee)"
+        },
+        "notion-daily-note.dateTimeFormat": {
+          "type": "string",
+          "description": "日時のフォーマット。日時を書き込む際に使用されます。 ※書式： https://date-fns.org/v4.1.0/docs/format",
+          "default": "yyyy/MM/dd(eee) HH:mm:ss"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.9",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.95.0",
+    "@typescript-eslint/eslint-plugin": "^8.10.0",
+    "@typescript-eslint/parser": "^8.7.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.13.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.6.3",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.2.15",
+    "date-fns": "^4.1.0"
+  }
+}
