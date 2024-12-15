@@ -1,7 +1,7 @@
 {
   "name": "notion-daily-note",
   "displayName": "Notion Daily Note",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "octetdesign",
   "description": "選択範囲のテキストを日付毎の Notion ページに書き込む Visual Studio Code の機能拡張です。",
   "engines": {
@@ -63,23 +63,50 @@
           "type": "string",
           "description": "データベースページのURL"
         },
-        "notion-daily-note.writeDateTime": {
+        "notion-daily-note.writeTimestamp": {
           "order": 30,
           "type": "boolean",
-          "description": "テキストと一緒に日時を書き込みます。",
+          "description": "テキストと一緒にタイムスタンプを書き込みます。",
           "default": true
         },
-        "notion-daily-note.dateFormat": {
+        "notion-daily-note.timestampColor": {
           "order": 40,
+          "type": "string",
+          "description": "タイムスタンプの色。",
+          "enum": [
+            "blue",
+            "blue_background",
+            "brown",
+            "brown_background",
+            "gray",
+            "gray_background",
+            "green",
+            "green_background",
+            "orange",
+            "orange_background",
+            "yellow",
+            "green",
+            "pink",
+            "pink_background",
+            "purple",
+            "purple_background",
+            "red",
+            "red_background",
+            "yellow_background"
+          ],
+          "default": "yellow_background"
+        },
+        "notion-daily-note.dateFormat": {
+          "order": 50,
           "required": true,
           "type": "string",
           "description": "日付のフォーマット。ページのタイトルに使用されます。 ※書式： https://date-fns.org/v4.1.0/docs/format",
           "default": "yyyy/MM/dd(eee)"
         },
-        "notion-daily-note.dateTimeFormat": {
-          "order": 50,
+        "notion-daily-note.timestampFormat": {
+          "order": 60,
           "type": "string",
-          "description": "日時のフォーマット。日時を書き込む際に使用されます。 ※書式： https://date-fns.org/v4.1.0/docs/format",
+          "description": "タイムスタンプのフォーマット。 ※書式： https://date-fns.org/v4.1.0/docs/format",
           "default": "yyyy/MM/dd(eee) HH:mm:ss"
         }
       }
