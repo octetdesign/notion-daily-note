@@ -1,7 +1,7 @@
 {
   "name": "notion-daily-note",
   "displayName": "Notion Daily Note",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "octetdesign",
   "description": "選択範囲のテキストを日付毎の Notion ページに書き込む Visual Studio Code の機能拡張です。",
   "engines": {
@@ -24,8 +24,13 @@
   "contributes": {
     "commands": [
       {
+        "command": "notion-daily-note.write",
+        "title": "選択範囲をNotionに書き込む（Markdownが有効）",
+        "category": "Notion Daily Note"
+      },
+      {
         "command": "notion-daily-note.writeText",
-        "title": "選択範囲をNotionに書き込む",
+        "title": "選択範囲をテキストでNotionに書き込む",
         "category": "Notion Daily Note"
       },
       {
@@ -139,6 +144,7 @@
   },
   "dependencies": {
     "@notionhq/client": "^2.2.15",
+    "@tryfabric/martian": "1.2.4",
     "date-fns": "^4.1.0"
   }
 }

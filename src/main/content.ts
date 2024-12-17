@@ -1,6 +1,8 @@
 import { format } from 'date-fns'
 import { ja } from 'date-fns/locale'
 import { BlockObjectRequest } from '@notionhq/client/build/src/api-endpoints'
+import { markdownToBlocks } from '@tryfabric/martian'
+import { CommandType } from '../extension'
 import { ApiColor } from './writeToNotion'
 
 /**
@@ -12,7 +14,7 @@ export const generateContent = (props: {
   dateFormat: string
   timestampFormat: string
   text: string
-  commandType?: 'text' | 'codeBlock'
+  commandType?: CommandType
   language?: string
   fileName?: string
   writeTimestamp?: boolean
@@ -41,7 +43,7 @@ export const generateContent = (props: {
   }
 
   // コンテンツ
-  children.push(generateBlock(props))
+  children.push(...generateBlocks(props))
 
   return children
 }
@@ -51,20 +53,21 @@ export const generateContent = (props: {
  * @param param0
  * @returns
  */
-const generateBlock = (props: {
+const generateBlocks = (props: {
   text: string
   language?: string
   fileName?: string
-  commandType?: 'text' | 'codeBlock'
+  commandType?: CommandType
 }) => {
+  const { commandType, text } = props
   let type = 'default'
 
-  // commandType='codeBlock'であればコードブロック
-  if (props.commandType === 'codeBlock') {
+  if (commandType === 'text') {
+    type = 'text'
+  } else if (commandType === 'codeBlock') {
     type = 'code'
-  }
-  // テキストがURLならブックマーク
-  else if (props.text.match(/^http[s]?:\/\/[^\s]+$/)) {
+  } else if (text.match(/^http[s]?:\/\/[^\s]+$/)) {
+    // テキストがURLならブックマーク
     type = 'bookmark'
   }
 
@@ -79,55 +82,64 @@ const generators: {
     text: string
     language?: string
     fileName?: string
-  }) => BlockObjectRequest
+  }) => BlockObjectRequest[]
 } = {
-  /** デフォルト */
-  default: ({ text }) => ({
-    object: 'block',
-    type: 'paragraph',
-    paragraph: {
-      rich_text: [
-        {
-          type: 'text',
-          text: { content: text },
-        },
-      ],
+  /* デフォルト ※MarkdownをmartianでNotionブロックに変換 */
+  default: (props) => markdownToBlocks(props.text) as BlockObjectRequest[],
+
+  /** テキスト */
+  text: ({ text }) => [
+    {
+      object: 'block',
+      type: 'paragraph',
+      paragraph: {
+        rich_text: [
+          {
+            type: 'text',
+            text: { content: text },
+          },
+        ],
+      },
     },
-  }),
+  ],
 
   /** ブックマーク */
-  bookmark: ({ text }) => ({
-    object: 'block',
-    type: 'bookmark',
-    bookmark: {
-      url: text,
+  bookmark: ({ text }) => [
+    {
+      object: 'block',
+      type: 'bookmark',
+      bookmark: {
+        url: text,
+      },
     },
-  }),
+  ],
 
   /** コードブロック */
-  code: ({ text, language, fileName }) => ({
-    object: 'block',
-    type: 'code',
-    code: {
-      caption: fileName
-        ? [
-            {
-              type: 'text',
-              text: {
-                content: fileName,
+  code: ({ text, language, fileName }) => [
+    {
+      object: 'block',
+      type: 'code',
+      code: {
+        caption: fileName
+          ? [
+              {
+                type: 'text',
+                text: {
+                  content: fileName,
+                },
               },
+            ]
+          : [],
+        rich_text: [
+          {
+            type: 'text',
+            text: {
+              content: text.replace(/^\n+/, '').replace(/\n+$/, ''),
             },
-          ]
-        : [],
-      rich_text: [
-        {
-          type: 'text',
-          text: {
-            content: text.replace(/^\n+/, '').replace(/\n+$/, ''),
           },
-        },
-      ],
-      language: (language ? language : '') as any,
+        ],
+        language: (language ? language : '') as any,
+      },
     },
-  }),
+  ],
 }

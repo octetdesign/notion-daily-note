@@ -5,6 +5,7 @@ import { format } from 'date-fns'
 import { ja } from 'date-fns/locale'
 import { generateContent } from './content'
 import { getLanguage } from './language'
+import { CommandType } from '../extension'
 
 /**
  * ブロックの色
@@ -34,10 +35,10 @@ export type ApiColor =
 /**
  * 選択範囲のテキストをNotionに書き込む
  *
- * @param commandType 'text' | 'codeBlock'
+ * @param commandType CommandType
  * @returns
  */
-export const writeToNotion = async (commandType: 'text' | 'codeBlock') => {
+export const writeToNotion = async (commandType: CommandType) => {
   // 設定の取得
   const config = vscode.workspace.getConfiguration('notion-daily-note')
   const apiKey = config.get<string>('apiKey')
