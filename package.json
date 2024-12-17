@@ -41,6 +41,12 @@
     ],
     "keybindings": [
       {
+        "command": "notion-daily-note.write",
+        "mac": "cmd+alt+m",
+        "win": "ctrl+alt+m",
+        "linux": "ctrl+alt+m"
+      },
+      {
         "command": "notion-daily-note.writeText",
         "mac": "cmd+alt+n",
         "win": "ctrl+alt+n",
