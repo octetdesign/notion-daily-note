@@ -1,7 +1,7 @@
 {
   "name": "notion-daily-note",
   "displayName": "Notion Daily Note",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publisher": "octetdesign",
   "description": "選択範囲のテキストを日付毎の Notion ページに書き込む Visual Studio Code の機能拡張です。",
   "engines": {
