@@ -1,0 +1,18 @@
+{
+  "extension.description": "Writes the selected text in the editor to a Notion page organized by date.",
+
+  "command.write.title": "Write Selection to Notion (Markdown Enabled)",
+  "command.writeText.title": "Write Selection as Text to Notion",
+  "command.writeCodeBlock.title": "Write Selection as a Code Block to Notion",
+
+  "configuration.apiKey.description": "Notion API Key",
+  "configuration.databasePageUrl.description": "Database Page URL",
+  "configuration.dateColumnName.description": "Date Column Name",
+  "configuration.dateColumnName.default": "Date",
+  "configuration.dateFormat.description": "Date Format. Used in the page title. ※format: https://date-fns.org/v4.1.0/docs/format",
+  "configuration.dateFormat.default": "PPPP",
+  "configuration.writeTimestamp.description": "Write a timestamp along with the text.",
+  "configuration.timestampColor.description": "Timestamp Color",
+  "configuration.timestampFormat.description": "Timestamp Format. ※format: https://date-fns.org/v4.1.0/docs/format",
+  "configuration.timestampFormat.default": "PPPPpp"
+}
