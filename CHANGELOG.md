@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.0.8] - 2025-01-12
+
+### Fixed
+
+- 軽微な修正
+
 ## [0.0.7] - 2025-01-12
 
 ### Added

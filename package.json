@@ -1,7 +1,7 @@
 {
   "name": "notion-daily-note",
   "displayName": "Notion Daily Note",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "publisher": "octetdesign",
   "description": "%extension.description%",
   "icon": "images/icon.png",
