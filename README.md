@@ -1,6 +1,6 @@
 # Notion Daily Note
 
-選択範囲のテキストを日付毎の Notion ページに書き込む Visual Studio Code の機能拡張です。
+エディタの選択範囲のテキストを日付毎の Notion ページに書き込みます。
 
 ## 特徴
 
@@ -48,9 +48,17 @@ Notion のサイトで VS Code と Notion を連携させるために必要な�
 
 Notion Daily Note の設定項目です。
 
-- `notion-daily-note.apiKey`: Notion の API キーを設定します。
-- `notion-daily-note.databasePageUrl`: データベースページの URL を指定します。
-- `notion-daily-note.writeTimestamp`: テキストと一緒にタイムスタンプを書き込みます。
-- `notion-daily-note.timestampColor`": タイムスタンプの色。
-- `notion-daily-note.dateFormat`: 日付のフォーマット。ページのタイトルに使用されます。 ※書式： https://date-fns.org/v4.1.0/docs/format
-- `notion-daily-note.timestampFormat`: タイムスタンプのフォーマット。 ※書式： https://date-fns.org/v4.1.0/docs/format
+- `notion-daily-note.apiKey`
+  - Notion の API キーを設定します。
+- `notion-daily-note.databasePageUrl`
+  - データベースページの URL を指定します。
+- `notion-daily-note.writeTimestamp`
+  - テキストと一緒にタイムスタンプを書き込みます。
+- `notion-daily-note.timestampColor`
+  - タイムスタンプの色。
+- `notion-daily-note.dateFormat`
+  - 日付のフォーマット。ページのタイトルに使用されます。
+  - ※書式： https://date-fns.org/v4.1.0/docs/format
+- `notion-daily-note.timestampFormat`
+  - タイムスタンプのフォーマット。
+  - ※書式： https://date-fns.org/v4.1.0/docs/format
