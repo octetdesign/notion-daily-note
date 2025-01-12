@@ -1,0 +1,11 @@
+{
+  "Date": "日付",
+  "PP": "yyyy/MM/dd(eee)",
+  "PPpp": "yyyy/MM/dd(eee) HH:mm:ss",
+  "Notion API Key or Database Page URL is not configured.": "Notion API キーまたはデータベースページURLが設定されていません。",
+  "No text editor is selected.": "テキストエディタが選択されていません。",
+  "No text is selected.": "テキストが選択されていません。",
+  "Text has been added to Notion page \"{pageTitle}\".": "テキストをNotionページ「{pageTitle}」に追加しました。",
+  "An error occurred while syncing to Notion:": "Notionへの同期中にエラーが発生しました：",
+  "Failed to sync text to Notion.": "Notionへのテキスト同期に失敗しました。"
+}

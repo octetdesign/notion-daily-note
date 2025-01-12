@@ -1,9 +1,9 @@
 {
   "name": "notion-daily-note",
   "displayName": "Notion Daily Note",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "publisher": "octetdesign",
-  "description": "選択範囲のテキストを日付毎の Notion ページに書き込む Visual Studio Code の機能拡張です。",
+  "description": "%extension.description%",
   "engines": {
     "vscode": "^1.95.0"
   },
@@ -12,6 +12,14 @@
   },
   "categories": [
     "Other"
+  ],
+  "keywords": [
+    "notion",
+    "daily",
+    "note",
+    "memo",
+    "markdown",
+    "codeblock"
   ],
   "pricing": "Free",
   "license": "MIT",
@@ -25,17 +33,17 @@
     "commands": [
       {
         "command": "notion-daily-note.write",
-        "title": "選択範囲をNotionに書き込む（Markdownが有効）",
+        "title": "%command.write.title%",
         "category": "Notion Daily Note"
       },
       {
         "command": "notion-daily-note.writeText",
-        "title": "選択範囲をテキストでNotionに書き込む",
+        "title": "%command.writeText.title%",
         "category": "Notion Daily Note"
       },
       {
         "command": "notion-daily-note.writeCodeBlock",
-        "title": "選択範囲をコードブロックでNotionに書き込む",
+        "title": "%command.writeCodeBlock.title%",
         "category": "Notion Daily Note"
       }
     ],
@@ -60,30 +68,44 @@
       }
     ],
     "configuration": {
-      "title": "NotionDailyNote",
+      "title": "Notion Daily Note",
       "properties": {
         "notion-daily-note.apiKey": {
           "order": 10,
           "required": true,
           "type": "string",
-          "description": "Notion API キー"
+          "description": "%configuration.apiKey.description%"
         },
         "notion-daily-note.databasePageUrl": {
           "order": 20,
           "required": true,
           "type": "string",
-          "description": "データベースページのURL"
+          "description": "%configuration.databasePageUrl.description%"
+        },
+        "notion-daily-note.dateColumnName": {
+          "order": 30,
+          "required": true,
+          "type": "string",
+          "description": "%configuration.dateColumnName.description%",
+          "default": "%configuration.dateColumnName.default%"
+        },
+        "notion-daily-note.dateFormat": {
+          "order": 40,
+          "required": true,
+          "type": "string",
+          "description": "%configuration.dateFormat.description%",
+          "default": "%configuration.dateFormat.default%"
         },
         "notion-daily-note.writeTimestamp": {
-          "order": 30,
+          "order": 50,
           "type": "boolean",
-          "description": "テキストと一緒にタイムスタンプを書き込みます。",
+          "description": "%configuration.writeTimestamp.description%",
           "default": true
         },
         "notion-daily-note.timestampColor": {
-          "order": 40,
+          "order": 60,
           "type": "string",
-          "description": "タイムスタンプの色。",
+          "description": "%configuration.timestampColor.description%",
           "enum": [
             "blue",
             "blue_background",
@@ -107,18 +129,11 @@
           ],
           "default": "yellow_background"
         },
-        "notion-daily-note.dateFormat": {
-          "order": 50,
-          "required": true,
-          "type": "string",
-          "description": "日付のフォーマット。ページのタイトルに使用されます。 ※書式： https://date-fns.org/v4.1.0/docs/format",
-          "default": "yyyy/MM/dd(eee)"
-        },
         "notion-daily-note.timestampFormat": {
-          "order": 60,
+          "order": 70,
           "type": "string",
-          "description": "タイムスタンプのフォーマット。 ※書式： https://date-fns.org/v4.1.0/docs/format",
-          "default": "yyyy/MM/dd(eee) HH:mm:ss"
+          "description": "%configuration.timestampFormat.description%",
+          "default": "%configuration.timestampFormat.default%"
         }
       }
     }
@@ -140,6 +155,7 @@
     "@types/vscode": "^1.95.0",
     "@typescript-eslint/eslint-plugin": "^8.10.0",
     "@typescript-eslint/parser": "^8.7.0",
+    "@vscode/l10n-dev": "^0.0.35",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
     "eslint": "^9.13.0",
@@ -151,8 +167,10 @@
   "dependencies": {
     "@notionhq/client": "^2.2.15",
     "@tryfabric/martian": "1.2.4",
+    "@vscode/l10n": "^0.0.18",
     "date-fns": "^4.1.0"
   },
+  "l10n": "./l10n",
   "resolutions": {
     "katex": "^0.16.0"
   }

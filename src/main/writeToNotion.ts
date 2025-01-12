@@ -43,8 +43,9 @@ export const writeToNotion = async (commandType: CommandType) => {
   const config = vscode.workspace.getConfiguration('notion-daily-note')
   const apiKey = config.get<string>('apiKey')
   const databasePageUrl = config.get<string>('databasePageUrl')
-  const dateFormat = config.get<string>('dateFormat', 'yyyy/MM/dd(eee)')
-  const timestampFormat = config.get<string>('timestampFormat', 'yyyy/MM/dd(eee) HH:mm:ss')
+  const dateColumnName = config.get<string>('dateColumnName', vscode.l10n.t('Date')) // 日付
+  const dateFormat = config.get<string>('dateFormat', vscode.l10n.t('PP')) // yyyy/MM/dd(eee)
+  const timestampFormat = config.get<string>('timestampFormat', vscode.l10n.t('PPpp')) // yyyy/MM/dd(eee) HH:mm:ss
   const writeTimestamp = config.get<boolean>('writeTimestamp', true)
   const timestampColor = config.get<ApiColor>('timestampColor', 'yellow_background')
 
@@ -52,7 +53,7 @@ export const writeToNotion = async (commandType: CommandType) => {
 
   if (!apiKey || !databasePageUrl) {
     vscode.window.showErrorMessage(
-      'NotionのAPI キーまたはデータベースページURLが設定されていません。'
+      vscode.l10n.t('Notion API Key or Database Page URL is not configured.') // Notion API キーまたはデータベースページURLが設定されていません。
     )
     return
   }
@@ -60,7 +61,7 @@ export const writeToNotion = async (commandType: CommandType) => {
   // アクティブなテキストエディタと選択範囲の取得
   const editor = vscode.window.activeTextEditor
   if (!editor) {
-    vscode.window.showInformationMessage('テキストエディタが選択されていません。')
+    vscode.window.showInformationMessage(vscode.l10n.t('No text editor is selected.')) // テキストエディタが選択されていません。
     return
   }
 
@@ -68,7 +69,7 @@ export const writeToNotion = async (commandType: CommandType) => {
   const selectedText = editor.document.getText(selection)
 
   if (!selectedText) {
-    vscode.window.showInformationMessage('テキストが選択されていません。')
+    vscode.window.showInformationMessage(vscode.l10n.t('No text is selected.')) // テキストが選択されていません。
     return
   }
 
@@ -85,7 +86,7 @@ export const writeToNotion = async (commandType: CommandType) => {
     const searchResult = await notion.databases.query({
       database_id: databaseId,
       filter: {
-        property: '日付',
+        property: dateColumnName,
         type: 'date',
         date: { equals: format(new Date(), 'yyyy-MM-dd') },
       },
@@ -136,9 +137,11 @@ export const writeToNotion = async (commandType: CommandType) => {
       pageId = newPage.id
     }
 
-    vscode.window.showInformationMessage(`テキストをNotionページ「${pageTitle}」に追加しました。`)
+    vscode.window.showInformationMessage(
+      vscode.l10n.t('Text has been added to Notion page "{pageTitle}".', { pageTitle }) // テキストをNotionページ「{pageTitle}」に追加しました。
+    )
   } catch (error) {
-    console.error('Notionへの同期中にエラーが発生しました:', error)
-    vscode.window.showErrorMessage('Notionへのテキスト同期に失敗しました。')
+    console.error(vscode.l10n.t('An error occurred while syncing to Notion:'), error) // Notionへの同期中にエラーが発生しました：
+    vscode.window.showErrorMessage(vscode.l10n.t('Failed to sync text to Notion.')) // Notionへのテキスト同期に失敗しました。
   }
 }
