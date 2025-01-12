@@ -170,6 +170,7 @@
     "@vscode/l10n": "^0.0.18",
     "date-fns": "^4.1.0"
   },
+  "l10n": "./l10n",
   "resolutions": {
     "katex": "^0.16.0"
   }
