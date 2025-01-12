@@ -6,9 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.0.7] - 2024-01-12
+
 ### Added
 
 - 国際化対応（英語）
+- 拡張機能にアイコンを適用しました。
 
 ## [0.0.6] - 2024-12-31
 

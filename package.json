@@ -4,6 +4,7 @@
   "version": "0.0.7",
   "publisher": "octetdesign",
   "description": "%extension.description%",
+  "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.95.0"
   },
