@@ -1,7 +1,7 @@
 {
   "Date": "日付",
-  "PP": "yyyy/MM/dd(eee)",
-  "PPpp": "yyyy/MM/dd(eee) HH:mm:ss",
+  "PPPP": "yyyy/MM/dd(eee)",
+  "PPPPpp": "yyyy/MM/dd(eee) HH:mm:ss",
   "Notion API Key or Database Page URL is not configured.": "Notion API キーまたはデータベースページURLが設定されていません。",
   "No text editor is selected.": "テキストエディタが選択されていません。",
   "No text is selected.": "テキストが選択されていません。",

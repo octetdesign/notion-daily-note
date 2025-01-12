@@ -44,8 +44,8 @@ export const writeToNotion = async (commandType: CommandType) => {
   const apiKey = config.get<string>('apiKey')
   const databasePageUrl = config.get<string>('databasePageUrl')
   const dateColumnName = config.get<string>('dateColumnName', vscode.l10n.t('Date')) // 日付
-  const dateFormat = config.get<string>('dateFormat', vscode.l10n.t('PP')) // yyyy/MM/dd(eee)
-  const timestampFormat = config.get<string>('timestampFormat', vscode.l10n.t('PPpp')) // yyyy/MM/dd(eee) HH:mm:ss
+  const dateFormat = config.get<string>('dateFormat', vscode.l10n.t('PPPP')) // yyyy/MM/dd(eee)
+  const timestampFormat = config.get<string>('timestampFormat', vscode.l10n.t('PPPPpp')) // yyyy/MM/dd(eee) HH:mm:ss
   const writeTimestamp = config.get<boolean>('writeTimestamp', true)
   const timestampColor = config.get<ApiColor>('timestampColor', 'yellow_background')
 
