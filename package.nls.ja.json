@@ -9,10 +9,10 @@
   "configuration.databasePageUrl.description": "データベースページのURL",
   "configuration.dateColumnName.description": "日付カラムの名前",
   "configuration.dateColumnName.default": "日付",
-  "configuration.dateFormat.description": "日付のフォーマット。ページのタイトルに使用されます。 ※書式： https://date-fns.org/v4.1.0/docs/format",
+  "configuration.dateFormat.description": "日付のフォーマット。ページのタイトルに使用されます。\n\n※書式：<https://date-fns.org/v4.1.0/docs/format>",
   "configuration.dateFormat.default": "yyyy/MM/dd(eee)",
   "configuration.writeTimestamp.description": "テキストと一緒にタイムスタンプを書き込みます。",
   "configuration.timestampColor.description": "タイムスタンプの色",
-  "configuration.timestampFormat.description": "タイムスタンプのフォーマット ※書式： https://date-fns.org/v4.1.0/docs/format",
+  "configuration.timestampFormat.description": "タイムスタンプのフォーマット\n\n※書式：<https://date-fns.org/v4.1.0/docs/format>",
   "configuration.timestampFormat.default": "yyyy/MM/dd(eee) HH:mm:ss"
 }

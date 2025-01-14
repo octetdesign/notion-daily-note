@@ -77,34 +77,58 @@
           "type": "string",
           "description": "%configuration.apiKey.description%"
         },
-        "notion-daily-note.databasePageUrl": {
+        "notion-daily-note.destinationPageType": {
           "order": 20,
           "required": true,
           "type": "string",
-          "description": "%configuration.databasePageUrl.description%"
+          "enum": [
+            "DatabasePage",
+            "FixPage"
+          ],
+          "enumItemLabels": [
+            "データベースページ",
+            "固定ページ"
+          ],
+          "_description": "%configuration.destinationPageType.description%",
+          "description": "テキストの書き込み先",
+          "default": "DatabasePage"
+        },
+        "notion-daily-note.databasePageUrl": {
+          "order": 30,
+          "required": false,
+          "type": "string",
+          "_description": "%configuration.databasePageUrl.description%",
+          "description": "データベースページのURL。テキストは日付毎のページに書き込まれます。\n※テキストの書き込み先が「データベースページ」の場合は必須"
+        },
+        "notion-daily-note.fixPageUrl": {
+          "order": 40,
+          "required": false,
+          "type": "string",
+          "_description": "%configuration.fixPageUrl.description%",
+          "description": "固定ページのURL。\n※テキストの書き込み先が「固定ページ」の場合は必須"
         },
         "notion-daily-note.dateColumnName": {
-          "order": 30,
+          "order": 50,
           "required": true,
           "type": "string",
           "description": "%configuration.dateColumnName.description%",
           "default": "%configuration.dateColumnName.default%"
         },
         "notion-daily-note.dateFormat": {
-          "order": 40,
+          "order": 60,
           "required": true,
           "type": "string",
-          "description": "%configuration.dateFormat.description%",
+          "markdownDescription": "%configuration.dateFormat.description%",
           "default": "%configuration.dateFormat.default%"
         },
         "notion-daily-note.writeTimestamp": {
-          "order": 50,
+          "order": 70,
           "type": "boolean",
           "description": "%configuration.writeTimestamp.description%",
           "default": true
         },
         "notion-daily-note.timestampColor": {
-          "order": 60,
+          "order": 80,
           "type": "string",
           "description": "%configuration.timestampColor.description%",
           "enum": [
@@ -131,9 +155,9 @@
           "default": "yellow_background"
         },
         "notion-daily-note.timestampFormat": {
-          "order": 70,
+          "order": 90,
           "type": "string",
-          "description": "%configuration.timestampFormat.description%",
+          "markdownDescription": "%configuration.timestampFormat.description%",
           "default": "%configuration.timestampFormat.default%"
         }
       }

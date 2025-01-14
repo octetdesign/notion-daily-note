@@ -1,6 +1,11 @@
 import * as vscode from 'vscode'
 import { Client } from '@notionhq/client'
-import { BlockObjectRequest } from '@notionhq/client/build/src/api-endpoints'
+import {
+  BlockObjectRequest,
+  PageObjectResponse,
+  PartialDatabaseObjectResponse,
+  PartialPageObjectResponse,
+} from '@notionhq/client/build/src/api-endpoints'
 import { format } from 'date-fns'
 import { ja } from 'date-fns/locale'
 import { generateContent } from './content'
@@ -42,7 +47,12 @@ export const writeToNotion = async (commandType: CommandType) => {
   // 設定の取得
   const config = vscode.workspace.getConfiguration('notion-daily-note')
   const apiKey = config.get<string>('apiKey')
+  const destinationPageType = config.get<'DatabasePage' | 'FixPage'>(
+    'destinationPageType',
+    'DatabasePage'
+  )
   const databasePageUrl = config.get<string>('databasePageUrl')
+  const fixPageUrl = config.get<string>('fixPageUrl')
   const dateColumnName = config.get<string>('dateColumnName', vscode.l10n.t('Date')) // 日付
   const dateFormat = config.get<string>('dateFormat', vscode.l10n.t('PPPP')) // yyyy/MM/dd(eee)
   const timestampFormat = config.get<string>('timestampFormat', vscode.l10n.t('PPPPpp')) // yyyy/MM/dd(eee) HH:mm:ss
@@ -78,21 +88,48 @@ export const writeToNotion = async (commandType: CommandType) => {
     const notion = new Client({ auth: apiKey })
     // console.log(notion);
 
-    // データベースのIDを取得
-    const databaseId = new URL(databasePageUrl).pathname.split('/').pop() || ''
-    // console.log({databaseId})
-
-    // 今日の日付でページを検索または作成
-    const searchResult = await notion.databases.query({
-      database_id: databaseId,
-      filter: {
-        property: dateColumnName,
-        type: 'date',
-        date: { equals: format(new Date(), 'yyyy-MM-dd') },
-      },
-    })
-    // console.log({databaseId, searchResult})
-    const datePage = searchResult.results[0]
+    // 書き込み先のページ
+    let destinationPage: PartialPageObjectResponse | PartialDatabaseObjectResponse | undefined =
+      undefined
+    let databaseId: string = ''
+    switch (destinationPageType) {
+      default:
+      // データベースページ
+      case 'DatabasePage':
+        // データベースのIDを取得
+        databaseId = new URL(databasePageUrl).pathname.split('/').pop() || ''
+        if (!databaseId) {
+          vscode.window.showErrorMessage(vscode.l10n.t('The database page URL is not set.')) // データベースページのURLが設定されていません。  // TODO: エラーメッセージをローカライズ
+          return
+        }
+        // console.log({databaseId})
+        // 今日の日付でページを検索または作成
+        const searchResult = await notion.databases.query({
+          database_id: databaseId,
+          filter: {
+            property: dateColumnName,
+            type: 'date',
+            date: { equals: format(new Date(), 'yyyy-MM-dd') },
+          },
+        })
+        // console.log({databaseId, searchResult})
+        destinationPage = searchResult.results[0]
+        break
+      // 固定ページ
+      case 'FixPage':
+        const fixPageId = fixPageUrl && new URL(fixPageUrl).pathname.split('/').pop()
+        if (!fixPageId) {
+          vscode.window.showErrorMessage(vscode.l10n.t('The fix page URL is not set.')) // 固定ページのURLが設定されていません。  // TODO: エラーメッセージをローカライズ
+          return
+        }
+        // 固定ページの取得
+        destinationPage = await notion.pages.retrieve({ page_id: fixPageId })
+        if (!destinationPage) {
+          vscode.window.showErrorMessage(vscode.l10n.t('Failed to get the fix page.')) // 固定ページの取得に失敗しました。  // TODO: エラーメッセージをローカライズ
+          return
+        }
+        break
+    }
 
     // ページに書き込む内容
     const document = vscode.window.activeTextEditor?.document
@@ -106,35 +143,62 @@ export const writeToNotion = async (commandType: CommandType) => {
       writeTimestamp,
       commandType,
     })
-
     let pageId: string
-    const today = format(new Date(), dateFormat, { locale: ja })
-    const pageTitle = today
-    if (datePage) {
-      // 既存のページが見つかった場合
-      pageId = datePage.id
+    let pageTitle: string = 'unknown'
+    switch (destinationPageType) {
+      default:
+      // データベースページ
+      case 'DatabasePage':
+        const today = format(new Date(), dateFormat, { locale: ja })
+        pageTitle = today
+        if (destinationPage) {
+          // console.log('destinationPage', destinationPage)
+          // 既存のページが見つかった場合
+          pageId = destinationPage.id
+          // ページに追記
+          await notion.blocks.children.append({
+            block_id: pageId,
+            children,
+          })
+        } else {
+          // 新規ページ作成
+          pageTitle = today
+          const newPage = await notion.pages.create({
+            parent: { database_id: databaseId },
+            properties: {
+              title: {
+                title: [{ type: 'text', text: { content: pageTitle } }],
+              },
+              日付: {
+                type: 'date',
+                date: { start: format(new Date(), 'yyyy-MM-dd') },
+              },
+            },
+            children,
+          })
+        }
+        break
+      // 固定ページ
+      case 'FixPage':
+        if (!destinationPage) {
+          throw new Error('Fix page is not found') // TODO: エラーメッセージをローカライズ
+        }
+        // console.log('destinationPage', destinationPage)
+        pageId = destinationPage.id
+        // ページのタイトルを設定
+        const titleProperty = (destinationPage as PageObjectResponse).properties?.title
+        if (titleProperty && titleProperty.type === 'title') {
+          pageTitle = titleProperty.title[0]?.plain_text || ''
+        } else {
+          pageTitle = 'unknown'
+        }
+        // ページに追記
+        await notion.blocks.children.append({
+          block_id: pageId,
+          children,
+        })
 
-      // ページに追記
-      await notion.blocks.children.append({
-        block_id: pageId,
-        children,
-      })
-    } else {
-      // 新規ページ作成
-      const newPage = await notion.pages.create({
-        parent: { database_id: databaseId },
-        properties: {
-          title: {
-            title: [{ type: 'text', text: { content: pageTitle } }],
-          },
-          日付: {
-            type: 'date',
-            date: { start: format(new Date(), 'yyyy-MM-dd') },
-          },
-        },
-        children,
-      })
-      pageId = newPage.id
+        break
     }
 
     vscode.window.showInformationMessage(
