@@ -47,12 +47,12 @@ export const writeToNotion = async (commandType: CommandType) => {
   // 設定の取得
   const config = vscode.workspace.getConfiguration('notion-daily-note')
   const apiKey = config.get<string>('apiKey')
-  const destinationPageType = config.get<'DatabasePage' | 'FixPage'>(
+  const destinationPageType = config.get<'DatabasePage' | 'FixedPage'>(
     'destinationPageType',
     'DatabasePage'
   )
   const databasePageUrl = config.get<string>('databasePageUrl')
-  const fixPageUrl = config.get<string>('fixPageUrl')
+  const fixedPageUrl = config.get<string>('fixedPageUrl')
   const dateColumnName = config.get<string>('dateColumnName', vscode.l10n.t('Date')) // 日付
   const dateFormat = config.get<string>('dateFormat', vscode.l10n.t('PPPP')) // yyyy/MM/dd(eee)
   const timestampFormat = config.get<string>('timestampFormat', vscode.l10n.t('PPPPpp')) // yyyy/MM/dd(eee) HH:mm:ss
@@ -116,16 +116,16 @@ export const writeToNotion = async (commandType: CommandType) => {
         destinationPage = searchResult.results[0]
         break
       // 固定ページ
-      case 'FixPage':
-        const fixPageId = fixPageUrl && new URL(fixPageUrl).pathname.split('/').pop()
-        if (!fixPageId) {
-          vscode.window.showErrorMessage(vscode.l10n.t('The fix page URL is not set.')) // 固定ページのURLが設定されていません。  // TODO: エラーメッセージをローカライズ
+      case 'FixedPage':
+        const fixedPageId = fixedPageUrl && new URL(fixedPageUrl).pathname.split('/').pop()
+        if (!fixedPageId) {
+          vscode.window.showErrorMessage(vscode.l10n.t('The fixed page URL is not set.')) // 固定ページのURLが設定されていません。  // TODO: エラーメッセージをローカライズ
           return
         }
         // 固定ページの取得
-        destinationPage = await notion.pages.retrieve({ page_id: fixPageId })
+        destinationPage = await notion.pages.retrieve({ page_id: fixedPageId })
         if (!destinationPage) {
-          vscode.window.showErrorMessage(vscode.l10n.t('Failed to get the fix page.')) // 固定ページの取得に失敗しました。  // TODO: エラーメッセージをローカライズ
+          vscode.window.showErrorMessage(vscode.l10n.t('Failed to get the fixed page.')) // 固定ページの取得に失敗しました。  // TODO: エラーメッセージをローカライズ
           return
         }
         break
@@ -179,9 +179,9 @@ export const writeToNotion = async (commandType: CommandType) => {
         }
         break
       // 固定ページ
-      case 'FixPage':
+      case 'FixedPage':
         if (!destinationPage) {
-          throw new Error('Fix page is not found') // TODO: エラーメッセージをローカライズ
+          throw new Error('Fixed page is not found') // TODO: エラーメッセージをローカライズ
         }
         // console.log('destinationPage', destinationPage)
         pageId = destinationPage.id
