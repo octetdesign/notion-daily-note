@@ -1,7 +1,7 @@
 {
   "name": "notion-daily-note",
   "displayName": "Notion Daily Note",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "publisher": "octetdesign",
   "description": "%extension.description%",
   "icon": "images/icon.png",
@@ -18,6 +18,7 @@
     "notion",
     "daily",
     "note",
+    "write",
     "memo",
     "markdown",
     "codeblock"
