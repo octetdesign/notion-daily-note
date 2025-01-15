@@ -1,18 +1,22 @@
 {
-  "extension.description": "Writes the selected text in the editor to a Notion page organized by date.",
+  "extension.description": "Writes the selected text in the editor to a Notion page. You can configure to write to a daily page by date or to a fixed page.",
 
-  "command.write.title": "Write Selection to Notion (Markdown Enabled)",
-  "command.writeText.title": "Write Selection as Text to Notion",
-  "command.writeCodeBlock.title": "Write Selection as a Code Block to Notion",
+  "command.write.title": "Write selected text to Notion (Markdown enabled)",
+  "command.writeText.title": "Write selected text to Notion as plain text",
+  "command.writeCodeBlock.title": "Write selected text to Notion as a code block",
 
   "configuration.apiKey.description": "Notion API Key",
-  "configuration.databasePageUrl.description": "Database Page URL",
-  "configuration.dateColumnName.description": "Date Column Name",
+  "configuration.destinationPageType.description": "Destination for writing text",
+  "configuration.destinationPageType.enum.databasePage": "Database Page",
+  "configuration.destinationPageType.enum.fixedPage": "Fixed Page",
+  "configuration.databasePageUrl.description": "URL of the database page. Text will be written to a page for each date.\n\n※Required if the text destination is \"Database Page\".",
+  "configuration.fixedPageUrl.description": "URL of the fixed page. Text is always written to the same page.\n\n※Required if the text destination is \"Fixed Page\".",
+  "configuration.dateColumnName.description": "Name of the date column",
   "configuration.dateColumnName.default": "Date",
-  "configuration.dateFormat.description": "Date Format. Used in the page title. ※format: https://date-fns.org/v4.1.0/docs/format",
+  "configuration.dateFormat.description": "Date format for the page title.\n\n※Format reference: <https://date-fns.org/v4.1.0/docs/format>",
   "configuration.dateFormat.default": "PPPP",
-  "configuration.writeTimestamp.description": "Write a timestamp along with the text.",
-  "configuration.timestampColor.description": "Timestamp Color",
-  "configuration.timestampFormat.description": "Timestamp Format. ※format: https://date-fns.org/v4.1.0/docs/format",
+  "configuration.writeTimestamp.description": "Include a timestamp with the text.",
+  "configuration.timestampColor.description": "Color of the timestamp",
+  "configuration.timestampFormat.description": "Timestamp format\n\n※Format reference: <https://date-fns.org/v4.1.0/docs/format>",
   "configuration.timestampFormat.default": "PPPPpp"
 }

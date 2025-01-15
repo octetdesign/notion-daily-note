@@ -75,38 +75,59 @@
           "order": 10,
           "required": true,
           "type": "string",
-          "description": "%configuration.apiKey.description%"
+          "markdownDescription": "%configuration.apiKey.description%"
         },
-        "notion-daily-note.databasePageUrl": {
+        "notion-daily-note.destinationPageType": {
           "order": 20,
           "required": true,
           "type": "string",
-          "description": "%configuration.databasePageUrl.description%"
+          "enum": [
+            "DatabasePage",
+            "FixedPage"
+          ],
+          "enumItemLabels": [
+            "%configuration.destinationPageType.enum.databasePage%",
+            "%configuration.destinationPageType.enum.fixedPage%"
+          ],
+          "markdownDescription": "%configuration.destinationPageType.description%",
+          "default": "DatabasePage"
+        },
+        "notion-daily-note.databasePageUrl": {
+          "order": 30,
+          "required": false,
+          "type": "string",
+          "markdownDescription": "%configuration.databasePageUrl.description%"
+        },
+        "notion-daily-note.fixedPageUrl": {
+          "order": 40,
+          "required": false,
+          "type": "string",
+          "markdownDescription": "%configuration.fixedPageUrl.description%"
         },
         "notion-daily-note.dateColumnName": {
-          "order": 30,
+          "order": 50,
           "required": true,
           "type": "string",
-          "description": "%configuration.dateColumnName.description%",
+          "markdownDescription": "%configuration.dateColumnName.description%",
           "default": "%configuration.dateColumnName.default%"
         },
         "notion-daily-note.dateFormat": {
-          "order": 40,
+          "order": 60,
           "required": true,
           "type": "string",
-          "description": "%configuration.dateFormat.description%",
+          "markdownDescription": "%configuration.dateFormat.description%",
           "default": "%configuration.dateFormat.default%"
         },
         "notion-daily-note.writeTimestamp": {
-          "order": 50,
+          "order": 70,
           "type": "boolean",
-          "description": "%configuration.writeTimestamp.description%",
+          "markdownDescription": "%configuration.writeTimestamp.description%",
           "default": true
         },
         "notion-daily-note.timestampColor": {
-          "order": 60,
+          "order": 80,
           "type": "string",
-          "description": "%configuration.timestampColor.description%",
+          "markdownDescription": "%configuration.timestampColor.description%",
           "enum": [
             "blue",
             "blue_background",
@@ -131,9 +152,9 @@
           "default": "yellow_background"
         },
         "notion-daily-note.timestampFormat": {
-          "order": 70,
+          "order": 90,
           "type": "string",
-          "description": "%configuration.timestampFormat.description%",
+          "markdownDescription": "%configuration.timestampFormat.description%",
           "default": "%configuration.timestampFormat.default%"
         }
       }

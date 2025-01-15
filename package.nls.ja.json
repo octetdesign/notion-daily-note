@@ -1,18 +1,22 @@
 {
-  "extension.description": "エディタの選択範囲のテキストを日付毎のNotionページに書き込みます。",
+  "extension.description": "エディタの選択範囲のテキストをNotionページに書き込みます。書き込み先は日付毎のページか固定ページを設定できます。",
 
   "command.write.title": "選択範囲をNotionに書き込む（Markdownが有効）",
   "command.writeText.title": "選択範囲をテキストでNotionに書き込む",
   "command.writeCodeBlock.title": "選択範囲をコードブロックでNotionに書き込む",
 
   "configuration.apiKey.description": "Notion API キー",
-  "configuration.databasePageUrl.description": "データベースページのURL",
+  "configuration.destinationPageType.description": "テキストの書き込み先",
+  "configuration.destinationPageType.enum.databasePage": "データベースページ",
+  "configuration.destinationPageType.enum.fixedPage": "固定ページ",
+  "configuration.databasePageUrl.description": "データベースページのURL。テキストは日付毎のページに書き込まれます。\n\n※テキストの書き込み先が「データベースページ」の場合は必須",
+  "configuration.fixedPageUrl.description": "固定ページのURL。テキストは常に同じページに書き込まれます。\n\n※テキストの書き込み先が「固定ページ」の場合は必須",
   "configuration.dateColumnName.description": "日付カラムの名前",
   "configuration.dateColumnName.default": "日付",
-  "configuration.dateFormat.description": "日付のフォーマット。ページのタイトルに使用されます。 ※書式： https://date-fns.org/v4.1.0/docs/format",
+  "configuration.dateFormat.description": "日付のフォーマット。ページのタイトルに使用されます。\n\n※書式：<https://date-fns.org/v4.1.0/docs/format>",
   "configuration.dateFormat.default": "yyyy/MM/dd(eee)",
   "configuration.writeTimestamp.description": "テキストと一緒にタイムスタンプを書き込みます。",
   "configuration.timestampColor.description": "タイムスタンプの色",
-  "configuration.timestampFormat.description": "タイムスタンプのフォーマット ※書式： https://date-fns.org/v4.1.0/docs/format",
+  "configuration.timestampFormat.description": "タイムスタンプのフォーマット\n\n※書式：<https://date-fns.org/v4.1.0/docs/format>",
   "configuration.timestampFormat.default": "yyyy/MM/dd(eee) HH:mm:ss"
 }

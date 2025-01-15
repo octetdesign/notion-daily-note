@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.0.9] - 2025-01-xx
+
+### Added
+
+- テキストの書き込み先として固定ページを設定できるようにしました。
+
 ## [0.0.8] - 2025-01-12
 
 ### Fixed
