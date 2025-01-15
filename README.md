@@ -2,79 +2,107 @@
 
 # Notion Daily Note
 
-Writes selected text from the editor to daily Notion pages.
+Writes the text selected in the editor to a Notion page. You can configure whether to write to a daily page by date or a fixed page.
 
 ## Features
 
-- Writes editor-selected text to Notion pages
-- Text can be written in three ways:
-  - Convert Markdown to Notion headings, lists, tables, etc.
-  - Write as plain text without formatting
-  - Write as a code block based on the current editor language
-- Notion pages are automatically created daily (pages are automatically added to a calendar view database by date)
-- Timestamps can be written alongside text
+- Writes the text selected in the editor to a Notion page.
+- There are three ways to write text:
+  - Convert the Markdown in the text to Notion headings, lists, tables, etc.
+  - Write as simple text with no formatting
+  - Write as a code block according to the language of the open editor
+- You can configure the Notion page to which you want to write:
+  - A daily page
+  - A fixed page
+- You can also include a timestamp along with the text.
+
+> Tip: It is convenient to create multiple Notion pages for different workspaces.
 
 ## Usage
 
-1. Select text in the editor and run one of these commands from the command palette:
-   - `Write Selection to Notion (Markdown enabled)`
-     - Writes selected text to a Notion page, converting Markdown to Notion headings, lists, tables, etc.
-   - `Write Selection as Text to Notion`
-     - Writes selected text to a Notion page as plain text
-   - `Write Selection as Code Block to Notion`
-     - Writes selected text to a Notion page as a code block
-1. A dated Notion page is created and the text or code block is written
-   - Text will be added to the same page until the date changes
+1. Select the text in the editor and run one of the following commands from the command palette:
+   - "Write selected text to Notion (Markdown enabled)"
+     - Writes the selected text in the editor to the Notion page, converting Markdown within the text into headings, lists, tables, etc.
+   - "Write selected text to Notion as plain text"
+     - Writes the selected text in the editor to the Notion page.
+   - "Write selected text to Notion as a code block"
+     - Writes the selected text in the editor to the Notion page as a code block.
+1. The text or code block is written to the Notion page specified in the settings.
+   - Each time you run a command, the text is appended to the page.
 
-## Configuration
+## Settings
 
-### Notion Setup
+### Notion Configuration
 
-#### Integration Setup (Getting API Key)
+#### Setting up the Integration (Obtaining an API Key)
 
-Create an "integration" on the Notion site to connect VS Code with Notion.
+Obtain the necessary “integration” (and its API key) to link VS Code with Notion by creating it from the Notion website.
 
-[Integrations | Notion](https://www.notion.so/profile/integrations)
+1. Open the Notion integration management page:
+   - [Integrations | Notion](https://www.notion.so/profile/integrations)
+2. Create a new integration.
+   - Any integration name can be used (e.g., “for VS Code”).
+3. Copy the “Internal Integration Secret” (this is your API key).
 
-The integration name can be anything you prefer (e.g., "VS Code")
+Set this API key in the `notion-daily-note.apiKey` setting of VS Code.
 
-> Tip: Don't close the page after creating the integration as you'll need to set up the "Internal Integration Secret" (API key) in the extension
+#### Writing text to a daily page
 
-#### Creating Database Page
+Create a database page to write text to, configure your integration, and obtain the page URL.
 
-1. Create any page in Notion (example page title: "Notes")
-2. Add a "Calendar View" database to the created page
-3. Display the created database in full screen
-4. Select "Connect > Connections" from "..." in the top right and choose the previously created integration
+1. Create any page in Notion (example title: “Daily Notes”).
+2. Add a database with a calendar view to this new page.
+3. Expand the database to full-screen.
+4. Under “...”, select “Connect > Connections” and choose the integration you set up.
+5. Under “...”, select “Copy link” to copy the page URL.
 
-> Tip: You'll also need to set the URL of the created database page in the extension. This URL can be obtained by selecting "Copy link" from "..." in the top right
+Set this URL in the `notion-daily-note.databasePageUrl` setting of VS Code.
 
-### VS Code Settings
+#### Writing text to a fixed page
 
-Configuration items for Notion Daily Note:
+Create the page you want to write to, configure your integration, and get that page’s URL.
+
+1. Create any page in Notion (example title: “Notes”).
+2. Under “...”, select “Connect > Connections” and pick the integration you previously created.
+3. Under “...”, select “Copy link” to copy the page URL.
+
+Set this URL in the `notion-daily-note.fixedPageUrl` setting of VS Code.
+
+### VS Code Configuration
+
+The following settings belong to Notion Daily Note:
 
 - `notion-daily-note.apiKey`
-  - Set the Notion API key
+  - Notion API key
+- `notion-daily-note.destinationPageType`
+  - Where to write the text
+  - Set it to “Database Page” if you want to write text to a daily page, or “Fixed Page” if the same page is always used
 - `notion-daily-note.databasePageUrl`
-  - Specify the Database Page URL
+  - The URL of your database page
+  - Required if “Database Page” is selected
+- `notion-daily-note.fixedPageUrl`
+  - The URL of your fixed page
+  - Required if “Fixed Page” is selected
 - `notion-daily-note.dateColumnName`
-  - Name of the date column
+  - The name of the date column
+  - Used only if “Database Page” is selected
 - `notion-daily-note.dateFormat`
-  - Date format used for page titles
-  - Format: https://date-fns.org/v4.1.0/docs/format
+  - The date format used for the page title
+  - Used only if “Database Page” is selected
+  - Format reference: <https://date-fns.org/v4.1.0/docs/format>
 - `notion-daily-note.writeTimestamp`
-  - Write timestamps alongside text
+  - Write a timestamp together with the text
 - `notion-daily-note.timestampColor`
-  - Color of timestamps
+  - Color for the timestamp
 - `notion-daily-note.timestampFormat`
-  - Format of timestamps
-  - Format: https://date-fns.org/v4.1.0/docs/format
+  - Timestamp format
+  - Format reference: <https://date-fns.org/v4.1.0/docs/format>
 
 ---
 
 # Notion Daily Note（日本語）
 
-エディタの選択範囲のテキストを日付毎の Notion ページに書き込みます。
+エディタの選択範囲のテキストを Notion ページに書き込みます。書き込み先は日付毎のページか固定ページを設定できます。
 
 ## 特徴
 
@@ -83,8 +111,12 @@ Configuration items for Notion Daily Note:
   - Markdown を Notion の見出しやリスト、テーブル等に変換して書き込む
   - 装飾のない単純なテキストとして書き込む
   - 開いているエディタの言語に応じたコードブロックとして書き込む
-- 書き込む先の Notion ページは日付毎に自動作成されます。（カレンダービューのデータベースに日付毎のページが自動追加されます。）
+- 書き込み先の Notion ページは以下のどちらかを設定できます。
+  - 日付毎のページ
+  - 固定ページ
 - テキストと一緒にタイムスタンプを書き込むことができます。
+
+> Tip: 書き込み先の Notion ページを複数作ってワークスペース毎に設定すると便利です。
 
 ## 使い方
 
@@ -95,8 +127,8 @@ Configuration items for Notion Daily Note:
      - エディタで選択したテキストを Notion ページに書き込みます。
    - `選択範囲をコードブロックでNotionに書き込む`
      - エディタで選択したテキストをコードブロックで Notion ページに書き込みます。
-1. 日付毎の Notion ページが作成され、テキストまたはコードブロックが書き込まれます。
-   - 日付が変わるまでは同じページにテキストが追加されます。
+1. 設定で指定された Notion ページにテキストまたはコードブロックが書き込まれます。
+   - コマンドを実行する度、テキストがページ内に追記されます。
 
 ## 設定
 
@@ -104,40 +136,64 @@ Configuration items for Notion Daily Note:
 
 #### インテグレーションの設定（API キーの取得）
 
-Notion のサイトで VS Code と Notion を連携させるために必要な「インテグレーション」を作成します。
+Notion のサイトで VS Code と Notion を連携させるために必要な「インテグレーション」を作成して API キーを取得します。
 
-[インテグレーション | Notion](https://www.notion.so/profile/integrations)
+1. Notion のインテグレーション管理ページを開きます。
+   - [インテグレーション | Notion](https://www.notion.so/profile/integrations)
+2. 新しいインテグレーションを作成します。
+   - インテグレーション名は何でも構わないのでお好みで。（例：「for VS Code」）
+3. 「内部インテグレーションシークレット」（これが API キーです）をコピーします。
 
-インテグレーションの名前は何でも構わないのでお好みで。（例：「VS Code」）
+この API キーを VS Code の設定`notion-daily-note.apiKey`に設定します。
 
-> Tip: 作成したインテグレーションの「内部インテグレーションシークレット」（API キー）を機能拡張に設定することになるので、インテグレーション作成後にページを閉じないようにしておいて下さい。
+#### 日付毎のページにテキストを書き込む場合
 
-#### データベースページの作成
+書き込み先のデータベースページを作成してインテグレーションを設定、そのページの URL を取得します。
 
-1. Notion で任意のページを作成します。（ページタイトルの例：「メモ」）
+1. Notion で任意のページを作成します。（ページタイトルの例：「日別メモ」）
 2. 作成したページにデータベース「カレンダービュー」を追加します。
 3. 作成したデータベースをフルスクリーン表示します。
 4. 右上の「…」から「コネクト > 接続先」を選択し、事前に作成したインテグレーションを選択します。
+5. 右上の「…」から「リンクをコピー」でページの URL をコピーします。
 
-> Tip: 作成したデータベースページの URL も機能拡張に設定します。この URL は右上の「…」から「リンクをコピー」で取得できます。
+この URL を VS Code の設定`notion-daily-note.databasePageUrl`に設定します。
+
+#### 固定ページにテキストを書き込む場合
+
+書き込み先のページを作成してインテグレーションを設定、そのページの URL を取得します。
+
+1. Notion で任意のページを作成します。（ページタイトルの例：「メモ」）
+2. 右上の「…」から「コネクト > 接続先」を選択し、事前に作成したインテグレーションを選択します。
+3. 右上の「…」から「リンクをコピー」でページの URL をコピーします。
+
+この URL を VS Code の設定`notion-daily-note.fixedPageUrl`に設定します。
 
 ### VS Code 側の設定
 
 Notion Daily Note の設定項目です。
 
 - `notion-daily-note.apiKey`
-  - Notion の API キーを設定します。
+  - Notion の API キー
+- `notion-daily-note.destinationPageType`
+  - テキストの書き込み先
+  - 日付毎のページにテキストを書き込む場合は「データベースページ」、常に同じページにテキストを書き込む場合は「固定ページ」を指定します。
 - `notion-daily-note.databasePageUrl`
-  - データベースページの URL を指定します。
+  - データベースページの URL
+  - ※テキストの書き込み先が「データベースページ」の場合は必須
+- `notion-daily-note.fixedPageUrl`
+  - 固定ページの URL
+  - ※テキストの書き込み先が「固定ページ」の場合は必須
 - `notion-daily-note.dateColumnName`
   - 日付カラムの名前
+  - ※この設定はテキストの書き込み先が「データベースページ」の場合に使用されます。
 - `notion-daily-note.dateFormat`
   - 日付のフォーマット。ページのタイトルに使用されます。
-  - 書式： https://date-fns.org/v4.1.0/docs/format
+  - ※この設定はテキストの書き込み先が「データベースページ」の場合に使用されます。
+  - 書式： <https://date-fns.org/v4.1.0/docs/format>
 - `notion-daily-note.writeTimestamp`
   - テキストと一緒にタイムスタンプを書き込みます。
 - `notion-daily-note.timestampColor`
   - タイムスタンプの色。
 - `notion-daily-note.timestampFormat`
   - タイムスタンプのフォーマット。
-  - 書式： https://date-fns.org/v4.1.0/docs/format
+  - 書式： <https://date-fns.org/v4.1.0/docs/format>

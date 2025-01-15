@@ -1,5 +1,5 @@
 {
-  "extension.description": "エディタの選択範囲のテキストをNotionページに書き込みます。書き込み先は日付毎のページまたは固定ページを設定できます。",
+  "extension.description": "エディタの選択範囲のテキストをNotionページに書き込みます。書き込み先は日付毎のページか固定ページを設定できます。",
 
   "command.write.title": "選択範囲をNotionに書き込む（Markdownが有効）",
   "command.writeText.title": "選択範囲をテキストでNotionに書き込む",
