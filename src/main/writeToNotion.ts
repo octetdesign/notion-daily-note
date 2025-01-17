@@ -198,9 +198,20 @@ export const writeToNotion = async (commandType: CommandType) => {
         break
     }
 
-    vscode.window.showInformationMessage(
-      vscode.l10n.t('Text has been added to Notion page "{pageTitle}".', { pageTitle }) // テキストをNotionページ「{pageTitle}」に追加しました。
-    )
+    // console.log(destinationPage)
+    const pageUrl = (destinationPage as PageObjectResponse).url
+    const openPageLabel = vscode.l10n.t('Open Notion Page')
+
+    vscode.window
+      .showInformationMessage(
+        vscode.l10n.t('Text has been added to Notion page "{pageTitle}".', { pageTitle }), // テキストをNotionページ「{pageTitle}」に追加しました。
+        openPageLabel
+      )
+      .then((selection) => {
+        if (selection === openPageLabel) {
+          vscode.env.openExternal(vscode.Uri.parse(pageUrl))
+        }
+      })
   } catch (error) {
     console.error(vscode.l10n.t('An error occurred while syncing to Notion:'), error) // Notionへの同期中にエラーが発生しました：
     vscode.window.showErrorMessage(vscode.l10n.t('Failed to sync text to Notion.')) // Notionへのテキスト同期に失敗しました。
