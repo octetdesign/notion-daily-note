@@ -11,5 +11,6 @@
 
   "The database page URL is not set.": "データベースページのURLが設定されていません。",
   "The fixed page URL is not set.": "固定ページのURLが設定されていません。",
-  "Failed to get the fixed page.": "固定ページの取得に失敗しました。"
+  "Failed to get the fixed page.": "固定ページの取得に失敗しました。",
+  "Open Notion Page": "Notionページを開く"
 }

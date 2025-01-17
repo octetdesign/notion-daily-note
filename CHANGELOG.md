@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.0.10] - 2025-01-18
+
+### Added
+
+- テキストを Notion ページに書き込んだ後に表示するメッセージから Notion ページを開けるようにしました。
+
 ## [0.0.9] - 2025-01-16
 
 ### Added
