@@ -84,11 +84,13 @@
           "type": "string",
           "enum": [
             "DatabasePage",
-            "FixedPage"
+            "FixedPage",
+            "SelectWhenWriting"
           ],
           "enumItemLabels": [
             "%configuration.destinationPageType.enum.databasePage%",
-            "%configuration.destinationPageType.enum.fixedPage%"
+            "%configuration.destinationPageType.enum.fixedPage%",
+            "%configuration.destinationPageType.enum.selectWhenWriting%"
           ],
           "markdownDescription": "%configuration.destinationPageType.description%",
           "default": "DatabasePage"

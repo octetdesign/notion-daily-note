@@ -7,9 +7,10 @@
 
   "configuration.apiKey.description": "Notion API キー",
   "configuration.destinationPageType.description": "テキストの書き込み先",
-  "configuration.destinationPageType.enum.databasePage": "データベースページ",
+  "configuration.destinationPageType.enum.databasePage": "日付毎のページ（データベースページ）",
   "configuration.destinationPageType.enum.fixedPage": "固定ページ",
-  "configuration.databasePageUrl.description": "データベースページのURL。テキストは日付毎のページに書き込まれます。\n\n※テキストの書き込み先が「データベースページ」の場合は必須",
+  "configuration.destinationPageType.enum.selectWhenWriting": "書き込み時に選択する",
+  "configuration.databasePageUrl.description": "データベースページのURL。テキストは日付毎のページに書き込まれます。\n\n※テキストの書き込み先が「日付毎のページ（データベースページ）」の場合は必須",
   "configuration.fixedPageUrl.description": "固定ページのURL。テキストは常に同じページに書き込まれます。\n\n※テキストの書き込み先が「固定ページ」の場合は必須",
   "configuration.dateColumnName.description": "日付カラムの名前",
   "configuration.dateColumnName.default": "日付",

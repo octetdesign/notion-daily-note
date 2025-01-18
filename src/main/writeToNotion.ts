@@ -12,6 +12,9 @@ import { generateContent } from './content'
 import { getLanguage } from './language'
 import { CommandType } from '../extension'
 
+/** 書き込み先ページタイプ */
+type DestinationPageType = 'DatabasePage' | 'FixedPage' | 'SelectWhenWriting'
+
 /**
  * ブロックの色
  * NOTE: 右記から転記 node_modules/@notionhq/client/build/src/api-endpoints.d.ts
@@ -47,7 +50,7 @@ export const writeToNotion = async (commandType: CommandType) => {
   // 設定の取得
   const config = vscode.workspace.getConfiguration('notion-daily-note')
   const apiKey = config.get<string>('apiKey')
-  const destinationPageType = config.get<'DatabasePage' | 'FixedPage'>(
+  const destinationPageTypeSetting = config.get<DestinationPageType>(
     'destinationPageType',
     'DatabasePage'
   )
@@ -61,9 +64,9 @@ export const writeToNotion = async (commandType: CommandType) => {
 
   // console.log('config', { apiKey, databasePageUrl, dateFormat, timestampFormat, writeTimestamp, timestampColor })
 
-  if (!apiKey || !databasePageUrl) {
+  if (!apiKey) {
     vscode.window.showErrorMessage(
-      vscode.l10n.t('Notion API Key or Database Page URL is not configured.') // Notion API キーまたはデータベースページURLが設定されていません。
+      vscode.l10n.t('Notion API Key is not configured.') // Notion API キーが設定されていません。
     )
     return
   }
@@ -83,6 +86,30 @@ export const writeToNotion = async (commandType: CommandType) => {
     return
   }
 
+  let destinationPageType: DestinationPageType | undefined = destinationPageTypeSetting
+
+  // 書き込み先の選択
+  if (destinationPageType === 'SelectWhenWriting') {
+    destinationPageType = await vscode.window
+      .showQuickPick(
+        [
+          { label: vscode.l10n.t('Page by Date (Database Page)'), description: 'DatabasePage' },
+          { label: vscode.l10n.t('Fixed page'), description: 'FixedPage' },
+        ],
+        {
+          placeHolder: vscode.l10n.t('Please select the destination page.'),
+          title: vscode.l10n.t('Notion Daily Note'),
+        }
+      )
+      .then((selection) => selection?.description as DestinationPageType)
+
+    if (!destinationPageType) {
+      return
+    }
+  }
+
+  // console.log('destinationPageType', destinationPageType)
+
   try {
     // Notion クライアントの初期化
     const notion = new Client({ auth: apiKey })
@@ -94,10 +121,11 @@ export const writeToNotion = async (commandType: CommandType) => {
     let databaseId: string = ''
     switch (destinationPageType) {
       default:
+        return
       // データベースページ
       case 'DatabasePage':
         // データベースのIDを取得
-        databaseId = new URL(databasePageUrl).pathname.split('/').pop() || ''
+        databaseId = (databasePageUrl && new URL(databasePageUrl).pathname.split('/').pop()) || ''
         if (!databaseId) {
           vscode.window.showErrorMessage(vscode.l10n.t('The database page URL is not set.')) // データベースページのURLが設定されていません。
           return
@@ -147,6 +175,7 @@ export const writeToNotion = async (commandType: CommandType) => {
     let pageTitle: string = 'unknown'
     switch (destinationPageType) {
       default:
+        return
       // データベースページ
       case 'DatabasePage':
         const today = format(new Date(), dateFormat, { locale: ja })
