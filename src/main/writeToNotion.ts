@@ -223,22 +223,19 @@ export const writeToNotion = async (commandType: CommandType) => {
         } else {
           // 新規ページ作成
           pageTitle = today
-          // TODO: any は適切な型に変更する
-          const pageData: any = {
+          destinationPage = await notion.pages.create({
             parent: { database_id: databaseId },
             properties: {
               title: {
                 title: [{ type: 'text', text: { content: pageTitle } }],
               },
+              [dateColumnName]: {
+                type: 'date',
+                date: { start: format(new Date(), 'yyyy-MM-dd') },
+              },
             },
             children,
-          }
-          pageData.properties[dateColumnName] = {
-            type: 'date',
-            date: { start: format(new Date(), 'yyyy-MM-dd') },
-          }
-          // console.log('pageData', pageData)
-          destinationPage = await notion.pages.create(pageData)
+          })
         }
         break
       // 固定ページ
