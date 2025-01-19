@@ -67,32 +67,56 @@ export const writeToNotion = async (commandType: CommandType) => {
 
   // console.log('config', { apiKey, databasePageUrl, dateFormat, timestampFormat, writeTimestamp, timestampColor })
 
+  /* 設定のチェック */
+
+  // APIキーの取得
   if (!apiKey) {
-    showErrorMessage(
-      t('Notion API Key is not configured.') // Notion API キーが設定されていません。
-    )
+    // Notion API キーが設定されていません。
+    showErrorMessage(t('Notion API Key is not configured.'))
     return
   }
+  // データベースページのURL設定値チェック
+  if (
+    (destinationPageTypeSetting === 'SelectWhenWriting' ||
+      destinationPageTypeSetting === 'DatabasePage') &&
+    !databasePageUrl
+  ) {
+    // データベースページのURLが設定されていません。
+    showErrorMessage(t('The database page URL is not set.'))
+  }
+  // 固定ページのURL設定値チェック
+  if (
+    (destinationPageTypeSetting === 'SelectWhenWriting' ||
+      destinationPageTypeSetting === 'FixedPage') &&
+    !fixedPageUrl
+  ) {
+    // 固定ページのURLが設定されていません。
+    showErrorMessage(t('The fixed page URL is not set.'))
+  }
 
-  // アクティブなテキストエディタと選択範囲の取得
+  /* テキストの取得 */
+
+  // アクティブなテキストエディタの取得
   const editor = activeTextEditor
   if (!editor) {
-    showInformationMessage(t('No text editor is selected.')) // テキストエディタが選択されていません。
+    // テキストエディタが選択されていません。
+    showInformationMessage(t('No text editor is selected.'))
     return
   }
-
-  const selection = editor.selection
-  const selectedText = editor.document.getText(selection)
-
+  // 選択されているテキストの取得
+  const selectedText = editor.document.getText(editor.selection)
   if (!selectedText) {
-    showInformationMessage(t('No text is selected.')) // テキストが選択されていません。
+    // テキストが選択されていません。
+    showInformationMessage(t('No text is selected.'))
     return
   }
 
-  let destinationPageType: DestinationPageType | undefined = destinationPageTypeSetting
+  /* 書き込み先の決定 */
 
-  // 書き込み先の選択
+  // 書き込み先
+  let destinationPageType: DestinationPageType | undefined = destinationPageTypeSetting
   if (destinationPageType === 'SelectWhenWriting') {
+    // 書き込み先の選択
     destinationPageType = await showQuickPick(
       [
         { label: t('Page by Date (Database Page)'), description: 'DatabasePage' },
@@ -109,7 +133,7 @@ export const writeToNotion = async (commandType: CommandType) => {
     }
   }
 
-  // console.log('destinationPageType', destinationPageType)
+  /* Notion への書き込み */
 
   try {
     // Notion クライアントの初期化
@@ -128,7 +152,7 @@ export const writeToNotion = async (commandType: CommandType) => {
         // データベースのIDを取得
         databaseId = (databasePageUrl && new URL(databasePageUrl).pathname.split('/').pop()) || ''
         if (!databaseId) {
-          showErrorMessage(t('The database page URL is not set.')) // データベースページのURLが設定されていません。
+          showErrorMessage(t('Failed to get the database ID.')) // TODO: データベースIDの取得に失敗しました。
           return
         }
         // console.log({databaseId})
@@ -146,19 +170,22 @@ export const writeToNotion = async (commandType: CommandType) => {
         break
       // 固定ページ
       case 'FixedPage':
-        const fixedPageId = fixedPageUrl && new URL(fixedPageUrl).pathname.split('/').pop()
+        const fixedPageId = (fixedPageUrl && new URL(fixedPageUrl).pathname.split('/').pop()) || ''
         if (!fixedPageId) {
-          showErrorMessage(t('The fixed page URL is not set.')) // 固定ページのURLが設定されていません。
+          showErrorMessage(t('Failed to get the fixed page ID.')) // TODO: 固定ページIDの取得に失敗しました。
           return
         }
         // 固定ページの取得
         destinationPage = await notion.pages.retrieve({ page_id: fixedPageId })
         if (!destinationPage) {
-          showErrorMessage(t('Failed to get the fixed page.')) // 固定ページの取得に失敗しました。
+          // 固定ページの取得に失敗しました。
+          showErrorMessage(t('Failed to get the fixed page.'))
           return
         }
         break
     }
+
+    /* ページに書き込む内容の生成 */
 
     // ページに書き込む内容
     const document = activeTextEditor?.document
@@ -172,6 +199,9 @@ export const writeToNotion = async (commandType: CommandType) => {
       writeTimestamp,
       commandType,
     })
+
+    /* ページへの書き込み */
+
     let pageId: string
     let pageTitle: string = 'unknown'
     switch (destinationPageType) {
@@ -179,7 +209,7 @@ export const writeToNotion = async (commandType: CommandType) => {
         return
       // データベースページ
       case 'DatabasePage':
-        const today = format(new Date(), dateFormat, { locale: ja })
+        const today = format(new Date(), dateFormat, { locale: ja }) // TODO: ロケールを設定する
         pageTitle = today
         if (destinationPage) {
           // console.log('destinationPage', destinationPage)
@@ -193,19 +223,22 @@ export const writeToNotion = async (commandType: CommandType) => {
         } else {
           // 新規ページ作成
           pageTitle = today
-          const newPage = await notion.pages.create({
+          // TODO: any は適切な型に変更する
+          const pageData: any = {
             parent: { database_id: databaseId },
             properties: {
               title: {
                 title: [{ type: 'text', text: { content: pageTitle } }],
               },
-              日付: {
-                type: 'date',
-                date: { start: format(new Date(), 'yyyy-MM-dd') },
-              },
             },
             children,
-          })
+          }
+          pageData.properties[dateColumnName] = {
+            type: 'date',
+            date: { start: format(new Date(), 'yyyy-MM-dd') },
+          }
+          // console.log('pageData', pageData)
+          destinationPage = await notion.pages.create(pageData)
         }
         break
       // 固定ページ
@@ -216,24 +249,23 @@ export const writeToNotion = async (commandType: CommandType) => {
         const titleProperty = (destinationPage as PageObjectResponse).properties?.title
         if (titleProperty && titleProperty.type === 'title') {
           pageTitle = titleProperty.title[0]?.plain_text || ''
-        } else {
-          pageTitle = 'unknown'
         }
         // ページに追記
         await notion.blocks.children.append({
           block_id: pageId,
           children,
         })
-
         break
     }
+
+    /* 完了メッセージの表示 */
 
     // console.log(destinationPage)
     const pageUrl = (destinationPage as PageObjectResponse).url
     const openPageLabel = t('Open Notion Page')
-
+    // テキストをNotionページ「{pageTitle}」に追加しました。
     showInformationMessage(
-      t('Text has been added to Notion page "{pageTitle}".', { pageTitle }), // テキストをNotionページ「{pageTitle}」に追加しました。
+      t('Text has been added to Notion page "{pageTitle}".', { pageTitle }),
       openPageLabel
     ).then((selection) => {
       if (selection === openPageLabel) {
@@ -241,7 +273,9 @@ export const writeToNotion = async (commandType: CommandType) => {
       }
     })
   } catch (error) {
-    console.error(t('An error occurred while syncing to Notion:'), error) // Notionへの同期中にエラーが発生しました：
-    showErrorMessage(t('Failed to sync text to Notion.')) // Notionへのテキスト同期に失敗しました。
+    // Notionへの同期中にエラーが発生しました：
+    console.error(t('An error occurred while syncing to Notion:'), error)
+    // Notionへのテキスト同期に失敗しました。
+    showErrorMessage(t('Failed to sync text to Notion.'))
   }
 }
