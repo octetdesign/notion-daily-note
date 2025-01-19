@@ -7,7 +7,7 @@ import {
   PartialPageObjectResponse,
 } from '@notionhq/client/build/src/api-endpoints'
 import { format } from 'date-fns'
-import { ja } from 'date-fns/locale'
+import { getLocale } from './locale'
 import { generateContent } from './content'
 import { getLanguage } from './language'
 import { CommandType } from '../extension'
@@ -209,10 +209,11 @@ export const writeToNotion = async (commandType: CommandType) => {
         return
       // データベースページ
       case 'DatabasePage':
-        const today = format(new Date(), dateFormat, { locale: ja }) // TODO: ロケールを設定する
-        pageTitle = today
+        // date-fnsのlocale（使用環境の言語から取得）
+        const locale = getLocale(vscode.env.language)
+        // ページタイトル（本日日付の文字列）
+        pageTitle = format(new Date(), dateFormat, { locale })
         if (destinationPage) {
-          // console.log('destinationPage', destinationPage)
           // 既存のページが見つかった場合
           pageId = destinationPage.id
           // ページに追記
@@ -222,7 +223,6 @@ export const writeToNotion = async (commandType: CommandType) => {
           })
         } else {
           // 新規ページ作成
-          pageTitle = today
           destinationPage = await notion.pages.create({
             parent: { database_id: databaseId },
             properties: {
