@@ -152,7 +152,10 @@ export const writeToNotion = async (commandType: CommandType) => {
         // データベースのIDを取得
         databaseId = (databasePageUrl && new URL(databasePageUrl).pathname.split('/').pop()) || ''
         if (!databaseId) {
-          showErrorMessage(t('Failed to get the database ID.')) // TODO: データベースIDの取得に失敗しました。
+          // データベースIDの取得に失敗しました。データベースページのURLの設定を確認して下さい。
+          showErrorMessage(
+            t('Failed to get the database ID. Please check the database page URL settings.')
+          )
           return
         }
         // console.log({databaseId})
@@ -172,7 +175,10 @@ export const writeToNotion = async (commandType: CommandType) => {
       case 'FixedPage':
         const fixedPageId = (fixedPageUrl && new URL(fixedPageUrl).pathname.split('/').pop()) || ''
         if (!fixedPageId) {
-          showErrorMessage(t('Failed to get the fixed page ID.')) // TODO: 固定ページIDの取得に失敗しました。
+          // 固定ページIDの取得に失敗しました。固定ページのURLの設定を確認して下さい。
+          showErrorMessage(
+            t('Failed to get the fixed page ID. Please check the fixed page URL settings.')
+          )
           return
         }
         // 固定ページの取得
