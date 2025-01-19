@@ -193,8 +193,9 @@ export const writeToNotion = async (commandType: CommandType) => {
 
     /* ページに書き込む内容の生成 */
 
-    // ページに書き込む内容
+    // ドキュメントの取得
     const document = activeTextEditor?.document
+    // ページに書き込む内容
     const children: BlockObjectRequest[] = generateContent({
       dateFormat,
       timestampFormat,
