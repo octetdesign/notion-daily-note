@@ -7,10 +7,14 @@ import {
   PartialPageObjectResponse,
 } from '@notionhq/client/build/src/api-endpoints'
 import { format } from 'date-fns'
-import { ja } from 'date-fns/locale'
+import { getDateColumnName, getLocale } from './locale'
 import { generateContent } from './content'
 import { getLanguage } from './language'
 import { CommandType } from '../extension'
+import { es, fr, ko, zhTW } from 'date-fns/locale'
+
+/** 書き込み先ページタイプ */
+type DestinationPageType = 'DatabasePage' | 'FixedPage' | 'SelectOnWrite'
 
 /**
  * ブロックの色
@@ -44,44 +48,95 @@ export type ApiColor =
  * @returns
  */
 export const writeToNotion = async (commandType: CommandType) => {
+  const { l10n, window } = vscode
+  const { t } = l10n
+  const { activeTextEditor, showInformationMessage, showQuickPick, showErrorMessage } = window
   // 設定の取得
   const config = vscode.workspace.getConfiguration('notion-daily-note')
   const apiKey = config.get<string>('apiKey')
-  const destinationPageType = config.get<'DatabasePage' | 'FixedPage'>(
+  const destinationPageTypeSetting = config.get<DestinationPageType>(
     'destinationPageType',
     'DatabasePage'
   )
   const databasePageUrl = config.get<string>('databasePageUrl')
   const fixedPageUrl = config.get<string>('fixedPageUrl')
-  const dateColumnName = config.get<string>('dateColumnName', vscode.l10n.t('Date')) // 日付
-  const dateFormat = config.get<string>('dateFormat', vscode.l10n.t('PPPP')) // yyyy/MM/dd(eee)
-  const timestampFormat = config.get<string>('timestampFormat', vscode.l10n.t('PPPPpp')) // yyyy/MM/dd(eee) HH:mm:ss
+  const dateColumnNameSetting = config.get<string>('dateColumnName') // 日付
+  const dateFormat = config.get<string>('dateFormat', t('PPPP')) // yyyy/MM/dd(eee)
+  const timestampFormat = config.get<string>('timestampFormat', t('PPPPpp')) // yyyy/MM/dd(eee) HH:mm:ss
   const writeTimestamp = config.get<boolean>('writeTimestamp', true)
   const timestampColor = config.get<ApiColor>('timestampColor', 'yellow_background')
 
   // console.log('config', { apiKey, databasePageUrl, dateFormat, timestampFormat, writeTimestamp, timestampColor })
 
-  if (!apiKey || !databasePageUrl) {
-    vscode.window.showErrorMessage(
-      vscode.l10n.t('Notion API Key or Database Page URL is not configured.') // Notion API キーまたはデータベースページURLが設定されていません。
-    )
+  /* 設定のチェック */
+
+  // APIキーの取得
+  if (!apiKey) {
+    // Notion API キーが設定されていません。
+    showErrorMessage(t('Notion API Key is not configured.'))
+    return
+  }
+  // データベースページのURL設定値チェック
+  if (
+    (destinationPageTypeSetting === 'SelectOnWrite' ||
+      destinationPageTypeSetting === 'DatabasePage') &&
+    !databasePageUrl
+  ) {
+    // データベースページのURLが設定されていません。
+    showErrorMessage(t('The database page URL is not set.'))
+    return
+  }
+  // 固定ページのURL設定値チェック
+  if (
+    (destinationPageTypeSetting === 'SelectOnWrite' ||
+      destinationPageTypeSetting === 'FixedPage') &&
+    !fixedPageUrl
+  ) {
+    // 固定ページのURLが設定されていません。
+    showErrorMessage(t('The fixed page URL is not set.'))
     return
   }
 
-  // アクティブなテキストエディタと選択範囲の取得
-  const editor = vscode.window.activeTextEditor
+  /* テキストの取得 */
+
+  // アクティブなテキストエディタの取得
+  const editor = activeTextEditor
   if (!editor) {
-    vscode.window.showInformationMessage(vscode.l10n.t('No text editor is selected.')) // テキストエディタが選択されていません。
+    // テキストエディタが選択されていません。
+    showInformationMessage(t('No text editor is selected.'))
     return
   }
-
-  const selection = editor.selection
-  const selectedText = editor.document.getText(selection)
-
+  // 選択されているテキストの取得
+  const selectedText = editor.document.getText(editor.selection)
   if (!selectedText) {
-    vscode.window.showInformationMessage(vscode.l10n.t('No text is selected.')) // テキストが選択されていません。
+    // テキストが選択されていません。
+    showInformationMessage(t('No text is selected.'))
     return
   }
+
+  /* 書き込み先の決定 */
+
+  // 書き込み先
+  let destinationPageType: DestinationPageType | undefined = destinationPageTypeSetting
+  if (destinationPageType === 'SelectOnWrite') {
+    // 書き込み先の選択
+    destinationPageType = await showQuickPick(
+      [
+        { label: t('Daily Page'), description: 'DatabasePage' },
+        { label: t('Fixed page'), description: 'FixedPage' },
+      ],
+      {
+        placeHolder: t('Please select the destination page.'),
+        title: t('Notion Daily Note'),
+      }
+    ).then((selection) => selection?.description as DestinationPageType)
+
+    if (!destinationPageType) {
+      return
+    }
+  }
+
+  /* Notion への書き込み */
 
   try {
     // Notion クライアントの初期化
@@ -91,15 +146,25 @@ export const writeToNotion = async (commandType: CommandType) => {
     // 書き込み先のページ
     let destinationPage: PartialPageObjectResponse | PartialDatabaseObjectResponse | undefined =
       undefined
+    // データベースID
     let databaseId: string = ''
+    // 日付カラム名
+    let dateColumnName = dateColumnNameSetting
+      ? dateColumnNameSetting
+      : getDateColumnName(vscode.env.language)
+
     switch (destinationPageType) {
       default:
+        return
       // データベースページ
       case 'DatabasePage':
         // データベースのIDを取得
-        databaseId = new URL(databasePageUrl).pathname.split('/').pop() || ''
+        databaseId = (databasePageUrl && new URL(databasePageUrl).pathname.split('/').pop()) || ''
         if (!databaseId) {
-          vscode.window.showErrorMessage(vscode.l10n.t('The database page URL is not set.')) // データベースページのURLが設定されていません。
+          // データベースIDの取得に失敗しました。データベースページのURLの設定を確認して下さい。
+          showErrorMessage(
+            t('Failed to get the database ID. Please check the database page URL settings.')
+          )
           return
         }
         // console.log({databaseId})
@@ -117,22 +182,29 @@ export const writeToNotion = async (commandType: CommandType) => {
         break
       // 固定ページ
       case 'FixedPage':
-        const fixedPageId = fixedPageUrl && new URL(fixedPageUrl).pathname.split('/').pop()
+        const fixedPageId = (fixedPageUrl && new URL(fixedPageUrl).pathname.split('/').pop()) || ''
         if (!fixedPageId) {
-          vscode.window.showErrorMessage(vscode.l10n.t('The fixed page URL is not set.')) // 固定ページのURLが設定されていません。
+          // 固定ページIDの取得に失敗しました。固定ページのURLの設定を確認して下さい。
+          showErrorMessage(
+            t('Failed to get the fixed page ID. Please check the fixed page URL settings.')
+          )
           return
         }
         // 固定ページの取得
         destinationPage = await notion.pages.retrieve({ page_id: fixedPageId })
         if (!destinationPage) {
-          vscode.window.showErrorMessage(vscode.l10n.t('Failed to get the fixed page.')) // 固定ページの取得に失敗しました。
+          // 固定ページの取得に失敗しました。
+          showErrorMessage(t('Failed to get the fixed page.'))
           return
         }
         break
     }
 
+    /* ページに書き込む内容の生成 */
+
+    // ドキュメントの取得
+    const document = activeTextEditor?.document
     // ページに書き込む内容
-    const document = vscode.window.activeTextEditor?.document
     const children: BlockObjectRequest[] = generateContent({
       dateFormat,
       timestampFormat,
@@ -143,16 +215,21 @@ export const writeToNotion = async (commandType: CommandType) => {
       writeTimestamp,
       commandType,
     })
+
+    /* ページへの書き込み */
+
     let pageId: string
     let pageTitle: string = 'unknown'
     switch (destinationPageType) {
       default:
+        return
       // データベースページ
       case 'DatabasePage':
-        const today = format(new Date(), dateFormat, { locale: ja })
-        pageTitle = today
+        // date-fnsのlocale（使用環境の言語から取得）
+        const locale = getLocale(vscode.env.language)
+        // ページタイトル（本日日付の文字列）
+        pageTitle = format(new Date(), dateFormat, { locale })
         if (destinationPage) {
-          // console.log('destinationPage', destinationPage)
           // 既存のページが見つかった場合
           pageId = destinationPage.id
           // ページに追記
@@ -162,14 +239,13 @@ export const writeToNotion = async (commandType: CommandType) => {
           })
         } else {
           // 新規ページ作成
-          pageTitle = today
-          const newPage = await notion.pages.create({
+          destinationPage = await notion.pages.create({
             parent: { database_id: databaseId },
             properties: {
               title: {
                 title: [{ type: 'text', text: { content: pageTitle } }],
               },
-              日付: {
+              [dateColumnName]: {
                 type: 'date',
                 date: { start: format(new Date(), 'yyyy-MM-dd') },
               },
@@ -186,34 +262,33 @@ export const writeToNotion = async (commandType: CommandType) => {
         const titleProperty = (destinationPage as PageObjectResponse).properties?.title
         if (titleProperty && titleProperty.type === 'title') {
           pageTitle = titleProperty.title[0]?.plain_text || ''
-        } else {
-          pageTitle = 'unknown'
         }
         // ページに追記
         await notion.blocks.children.append({
           block_id: pageId,
           children,
         })
-
         break
     }
 
+    /* 完了メッセージの表示 */
+
     // console.log(destinationPage)
     const pageUrl = (destinationPage as PageObjectResponse).url
-    const openPageLabel = vscode.l10n.t('Open Notion Page')
-
-    vscode.window
-      .showInformationMessage(
-        vscode.l10n.t('Text has been added to Notion page "{pageTitle}".', { pageTitle }), // テキストをNotionページ「{pageTitle}」に追加しました。
-        openPageLabel
-      )
-      .then((selection) => {
-        if (selection === openPageLabel) {
-          vscode.env.openExternal(vscode.Uri.parse(pageUrl))
-        }
-      })
+    const openPageLabel = t('Open Notion Page')
+    // テキストをNotionページ「{pageTitle}」に追加しました。
+    showInformationMessage(
+      t('Text has been added to Notion page "{pageTitle}".', { pageTitle }),
+      openPageLabel
+    ).then((selection) => {
+      if (selection === openPageLabel) {
+        vscode.env.openExternal(vscode.Uri.parse(pageUrl))
+      }
+    })
   } catch (error) {
-    console.error(vscode.l10n.t('An error occurred while syncing to Notion:'), error) // Notionへの同期中にエラーが発生しました：
-    vscode.window.showErrorMessage(vscode.l10n.t('Failed to sync text to Notion.')) // Notionへのテキスト同期に失敗しました。
+    // Notionへの同期中にエラーが発生しました：
+    console.error(t('An error occurred while syncing to Notion:'), error)
+    // Notionへのテキスト同期に失敗しました。
+    showErrorMessage(t('Failed to sync text to Notion.'))
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "notion-daily-note",
   "displayName": "Notion Daily Note",
-  "version": "0.0.10",
+  "version": "1.0.0",
   "publisher": "octetdesign",
   "description": "%extension.description%",
   "icon": "images/icon.png",
@@ -84,11 +84,13 @@
           "type": "string",
           "enum": [
             "DatabasePage",
-            "FixedPage"
+            "FixedPage",
+            "SelectOnWrite"
           ],
           "enumItemLabels": [
             "%configuration.destinationPageType.enum.databasePage%",
-            "%configuration.destinationPageType.enum.fixedPage%"
+            "%configuration.destinationPageType.enum.fixedPage%",
+            "%configuration.destinationPageType.enum.selectOnWrite%"
           ],
           "markdownDescription": "%configuration.destinationPageType.description%",
           "default": "DatabasePage"
@@ -107,10 +109,9 @@
         },
         "notion-daily-note.dateColumnName": {
           "order": 50,
-          "required": true,
+          "required": false,
           "type": "string",
-          "markdownDescription": "%configuration.dateColumnName.description%",
-          "default": "%configuration.dateColumnName.default%"
+          "markdownDescription": "%configuration.dateColumnName.description%"
         },
         "notion-daily-note.dateFormat": {
           "order": 60,

@@ -2,7 +2,7 @@
 
 # Notion Daily Note
 
-Writes the text selected in the editor to a Notion page. You can configure whether to write to a daily page by date or a fixed page.
+Writes the text selected in the editor to a Notion page. You can choose to write to a daily page by date or a fixed page.
 
 ## Features
 
@@ -11,7 +11,7 @@ Writes the text selected in the editor to a Notion page. You can configure wheth
   - Convert the Markdown in the text to Notion headings, lists, tables, etc.
   - Write as simple text with no formatting
   - Write as a code block according to the language of the open editor
-- You can configure the Notion page to which you want to write:
+- You can choose the Notion page to which you want to write:
   - A daily page
   - A fixed page
 - You can also include a timestamp along with the text.
@@ -76,19 +76,19 @@ The following settings belong to Notion Daily Note:
   - Notion API key
 - `notion-daily-note.destinationPageType`
   - Where to write the text
-  - Set it to “Database Page” if you want to write text to a daily page, or “Fixed Page” if the same page is always used
+  - Set it to “Daily Page (database page)” if you want to write text to a daily page, “Fixed Page” if the same page is always used, or “Select on Write” to choose each time.
 - `notion-daily-note.databasePageUrl`
   - The URL of your database page
-  - Required if “Database Page” is selected
+  - Required if “Daily Page” or “Select on Write” is selected
 - `notion-daily-note.fixedPageUrl`
   - The URL of your fixed page
-  - Required if “Fixed Page” is selected
+  - Required if “Fixed Page” or “Select on Write” is selected
 - `notion-daily-note.dateColumnName`
-  - The name of the date column
-  - Used only if “Database Page” is selected
+  - The Name of the date column. Specify the name of the date column in the database page.
+  - Used only if “Daily Page” is selected
 - `notion-daily-note.dateFormat`
   - The date format used for the page title
-  - Used only if “Database Page” is selected
+  - Used only if “Daily Page” is selected
   - Format reference: <https://date-fns.org/v4.1.0/docs/format>
 - `notion-daily-note.writeTimestamp`
   - Write a timestamp together with the text
@@ -102,7 +102,7 @@ The following settings belong to Notion Daily Note:
 
 # Notion Daily Note（日本語）
 
-エディタの選択範囲のテキストを Notion ページに書き込みます。書き込み先は日付毎のページか固定ページを設定できます。
+エディタの選択範囲のテキストを Notion ページに書き込みます。書き込み先は日付毎のページか固定ページを選択できます。
 
 ## 特徴
 
@@ -111,7 +111,7 @@ The following settings belong to Notion Daily Note:
   - Markdown を Notion の見出しやリスト、テーブル等に変換して書き込む
   - 装飾のない単純なテキストとして書き込む
   - 開いているエディタの言語に応じたコードブロックとして書き込む
-- 書き込み先の Notion ページは以下のどちらかを設定できます。
+- 書き込み先の Notion ページは以下のどちらかを選択できます。
   - 日付毎のページ
   - 固定ページ
 - テキストと一緒にタイムスタンプを書き込むことができます。
@@ -176,19 +176,19 @@ Notion Daily Note の設定項目です。
   - Notion の API キー
 - `notion-daily-note.destinationPageType`
   - テキストの書き込み先
-  - 日付毎のページにテキストを書き込む場合は「データベースページ」、常に同じページにテキストを書き込む場合は「固定ページ」を指定します。
+  - 日付毎のページにテキストを書き込む場合は「日付毎のページ」、常に同じページにテキストを書き込む場合は「固定ページ」、テキストを書き込む時にどちらか選択する場合は「書き込み時に選択する」を指定します。
 - `notion-daily-note.databasePageUrl`
   - データベースページの URL
-  - ※テキストの書き込み先が「データベースページ」の場合は必須
+  - ※テキストの書き込み先が「日付毎のページ」「書き込み時に選択する」の場合は必須
 - `notion-daily-note.fixedPageUrl`
   - 固定ページの URL
-  - ※テキストの書き込み先が「固定ページ」の場合は必須
+  - ※テキストの書き込み先が「固定ページ」「書き込み時に選択する」の場合は必須
 - `notion-daily-note.dateColumnName`
-  - 日付カラムの名前
-  - ※この設定はテキストの書き込み先が「データベースページ」の場合に使用されます。
+  - 日付カラムの名前。データベースページの日付カラムの名前を指定します。
+  - ※この設定はテキストの書き込み先が「日付毎のページ」の場合に使用されます。
 - `notion-daily-note.dateFormat`
   - 日付のフォーマット。ページのタイトルに使用されます。
-  - ※この設定はテキストの書き込み先が「データベースページ」の場合に使用されます。
+  - ※この設定はテキストの書き込み先が「日付毎のページ」の場合に使用されます。
   - 書式： <https://date-fns.org/v4.1.0/docs/format>
 - `notion-daily-note.writeTimestamp`
   - テキストと一緒にタイムスタンプを書き込みます。
