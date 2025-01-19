@@ -6,6 +6,17 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [1.0.0] - 2025-01-19
+
+### Added
+
+- 書き込み先の設定に「書き込み時に選択する」を追加しました。
+
+### Fixed
+
+- 日本語以外の環境でも正常に動作するよう修正しました。
+- コードのリファクタリングを行いました。
+
 ## [0.0.10] - 2025-01-18
 
 ### Added

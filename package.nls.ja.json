@@ -1,5 +1,5 @@
 {
-  "extension.description": "エディタの選択範囲のテキストをNotionページに書き込みます。書き込み先は日付毎のページか固定ページを設定できます。",
+  "extension.description": "エディタの選択範囲のテキストをNotionページに書き込みます。書き込み先は日付毎のページか固定ページを選択できます。",
 
   "command.write.title": "選択範囲をNotionに書き込む（Markdownが有効）",
   "command.writeText.title": "選択範囲をテキストでNotionに書き込む",
@@ -7,14 +7,14 @@
 
   "configuration.apiKey.description": "Notion API キー",
   "configuration.destinationPageType.description": "テキストの書き込み先",
-  "configuration.destinationPageType.enum.databasePage": "日付毎のページ（データベースページ）",
+  "configuration.destinationPageType.enum.databasePage": "日付毎のページ",
   "configuration.destinationPageType.enum.fixedPage": "固定ページ",
-  "configuration.destinationPageType.enum.selectWhenWriting": "書き込み時に選択する",
-  "configuration.databasePageUrl.description": "データベースページのURL。テキストは日付毎のページに書き込まれます。\n\n※テキストの書き込み先が「日付毎のページ（データベースページ）」の場合は必須",
-  "configuration.fixedPageUrl.description": "固定ページのURL。テキストは常に同じページに書き込まれます。\n\n※テキストの書き込み先が「固定ページ」の場合は必須",
+  "configuration.destinationPageType.enum.selectOnWrite": "書き込み時に選択する",
+  "configuration.databasePageUrl.description": "データベースページのURL。テキストは日付毎のページに書き込まれます。\n\n※テキストの書き込み先が「日付毎のページ」「書き込み時に選択する」の場合は必須",
+  "configuration.fixedPageUrl.description": "固定ページのURL。テキストは常に同じページに書き込まれます。\n\n※テキストの書き込み先が「固定ページ」「書き込み時に選択する」の場合は必須",
   "configuration.dateColumnName.description": "日付カラムの名前",
   "configuration.dateColumnName.default": "日付",
-  "configuration.dateFormat.description": "日付のフォーマット。ページのタイトルに使用されます。\n\n※書式：<https://date-fns.org/v4.1.0/docs/format>",
+  "configuration.dateFormat.description": "日付のフォーマット。日付毎のページのタイトルに使用されます。\n\n※書式：<https://date-fns.org/v4.1.0/docs/format>",
   "configuration.dateFormat.default": "yyyy/MM/dd(eee)",
   "configuration.writeTimestamp.description": "テキストと一緒にタイムスタンプを書き込みます。",
   "configuration.timestampColor.description": "タイムスタンプの色",

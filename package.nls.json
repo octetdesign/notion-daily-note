@@ -7,9 +7,9 @@
 
   "configuration.apiKey.description": "Notion API Key",
   "configuration.destinationPageType.description": "Destination for writing text",
-  "configuration.destinationPageType.enum.databasePage": "Database Page",
+  "configuration.destinationPageType.enum.databasePage": "Daily Page",
   "configuration.destinationPageType.enum.fixedPage": "Fixed Page",
-  "configuration.destinationPageType.enum.selectWhenWriting": "Select When Writing",
+  "configuration.destinationPageType.enum.selectOnWrite": "Select on Write",
   "configuration.databasePageUrl.description": "URL of the database page. Text will be written to a page for each date.\n\n※Required if the text destination is \"Database Page\".",
   "configuration.fixedPageUrl.description": "URL of the fixed page. Text is always written to the same page.\n\n※Required if the text destination is \"Fixed Page\".",
   "configuration.dateColumnName.description": "Name of the date column",

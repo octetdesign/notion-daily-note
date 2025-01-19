@@ -7,7 +7,7 @@
   "The fixed page URL is not set.": "固定ページのURLが設定されていません。",
   "No text editor is selected.": "テキストエディタが選択されていません。",
   "No text is selected.": "テキストが選択されていません。",
-  "Page by Date (Database Page)": "日付毎のページ（データベースページ）",
+  "Daily Page": "日付毎のページ",
   "Fixed page": "固定ページ",
   "Please select the destination page.": "書き込み先のページを選択して下さい。",
   "Notion Daily Note": "Notion Daily Note",

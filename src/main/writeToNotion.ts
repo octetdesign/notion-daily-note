@@ -13,7 +13,7 @@ import { getLanguage } from './language'
 import { CommandType } from '../extension'
 
 /** 書き込み先ページタイプ */
-type DestinationPageType = 'DatabasePage' | 'FixedPage' | 'SelectWhenWriting'
+type DestinationPageType = 'DatabasePage' | 'FixedPage' | 'SelectOnWrite'
 
 /**
  * ブロックの色
@@ -77,7 +77,7 @@ export const writeToNotion = async (commandType: CommandType) => {
   }
   // データベースページのURL設定値チェック
   if (
-    (destinationPageTypeSetting === 'SelectWhenWriting' ||
+    (destinationPageTypeSetting === 'SelectOnWrite' ||
       destinationPageTypeSetting === 'DatabasePage') &&
     !databasePageUrl
   ) {
@@ -87,7 +87,7 @@ export const writeToNotion = async (commandType: CommandType) => {
   }
   // 固定ページのURL設定値チェック
   if (
-    (destinationPageTypeSetting === 'SelectWhenWriting' ||
+    (destinationPageTypeSetting === 'SelectOnWrite' ||
       destinationPageTypeSetting === 'FixedPage') &&
     !fixedPageUrl
   ) {
@@ -117,11 +117,11 @@ export const writeToNotion = async (commandType: CommandType) => {
 
   // 書き込み先
   let destinationPageType: DestinationPageType | undefined = destinationPageTypeSetting
-  if (destinationPageType === 'SelectWhenWriting') {
+  if (destinationPageType === 'SelectOnWrite') {
     // 書き込み先の選択
     destinationPageType = await showQuickPick(
       [
-        { label: t('Page by Date (Database Page)'), description: 'DatabasePage' },
+        { label: t('Daily Page'), description: 'DatabasePage' },
         { label: t('Fixed page'), description: 'FixedPage' },
       ],
       {

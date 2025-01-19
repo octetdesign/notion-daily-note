@@ -1,7 +1,7 @@
 {
   "name": "notion-daily-note",
   "displayName": "Notion Daily Note",
-  "version": "0.0.10",
+  "version": "1.0.0",
   "publisher": "octetdesign",
   "description": "%extension.description%",
   "icon": "images/icon.png",
@@ -85,12 +85,12 @@
           "enum": [
             "DatabasePage",
             "FixedPage",
-            "SelectWhenWriting"
+            "SelectOnWrite"
           ],
           "enumItemLabels": [
             "%configuration.destinationPageType.enum.databasePage%",
             "%configuration.destinationPageType.enum.fixedPage%",
-            "%configuration.destinationPageType.enum.selectWhenWriting%"
+            "%configuration.destinationPageType.enum.selectOnWrite%"
           ],
           "markdownDescription": "%configuration.destinationPageType.description%",
           "default": "DatabasePage"
