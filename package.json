@@ -109,10 +109,9 @@
         },
         "notion-daily-note.dateColumnName": {
           "order": 50,
-          "required": true,
+          "required": false,
           "type": "string",
-          "markdownDescription": "%configuration.dateColumnName.description%",
-          "default": "%configuration.dateColumnName.default%"
+          "markdownDescription": "%configuration.dateColumnName.description%"
         },
         "notion-daily-note.dateFormat": {
           "order": 60,

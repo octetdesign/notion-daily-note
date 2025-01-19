@@ -84,7 +84,7 @@ The following settings belong to Notion Daily Note:
   - The URL of your fixed page
   - Required if “Fixed Page” or “Select on Write” is selected
 - `notion-daily-note.dateColumnName`
-  - The name of the date column
+  - The Name of the date column. Specify the name of the date column in the database page.
   - Used only if “Daily Page” is selected
 - `notion-daily-note.dateFormat`
   - The date format used for the page title
@@ -184,7 +184,7 @@ Notion Daily Note の設定項目です。
   - 固定ページの URL
   - ※テキストの書き込み先が「固定ページ」「書き込み時に選択する」の場合は必須
 - `notion-daily-note.dateColumnName`
-  - 日付カラムの名前
+  - 日付カラムの名前。データベースページの日付カラムの名前を指定します。
   - ※この設定はテキストの書き込み先が「日付毎のページ」の場合に使用されます。
 - `notion-daily-note.dateFormat`
   - 日付のフォーマット。ページのタイトルに使用されます。

@@ -7,10 +7,11 @@ import {
   PartialPageObjectResponse,
 } from '@notionhq/client/build/src/api-endpoints'
 import { format } from 'date-fns'
-import { getLocale } from './locale'
+import { getDateColumnName, getLocale } from './locale'
 import { generateContent } from './content'
 import { getLanguage } from './language'
 import { CommandType } from '../extension'
+import { es, fr, ko, zhTW } from 'date-fns/locale'
 
 /** 書き込み先ページタイプ */
 type DestinationPageType = 'DatabasePage' | 'FixedPage' | 'SelectOnWrite'
@@ -59,7 +60,7 @@ export const writeToNotion = async (commandType: CommandType) => {
   )
   const databasePageUrl = config.get<string>('databasePageUrl')
   const fixedPageUrl = config.get<string>('fixedPageUrl')
-  const dateColumnName = config.get<string>('dateColumnName', t('Date')) // 日付
+  const dateColumnNameSetting = config.get<string>('dateColumnName') // 日付
   const dateFormat = config.get<string>('dateFormat', t('PPPP')) // yyyy/MM/dd(eee)
   const timestampFormat = config.get<string>('timestampFormat', t('PPPPpp')) // yyyy/MM/dd(eee) HH:mm:ss
   const writeTimestamp = config.get<boolean>('writeTimestamp', true)
@@ -145,7 +146,13 @@ export const writeToNotion = async (commandType: CommandType) => {
     // 書き込み先のページ
     let destinationPage: PartialPageObjectResponse | PartialDatabaseObjectResponse | undefined =
       undefined
+    // データベースID
     let databaseId: string = ''
+    // 日付カラム名
+    let dateColumnName = dateColumnNameSetting
+      ? dateColumnNameSetting
+      : getDateColumnName(vscode.env.language)
+
     switch (destinationPageType) {
       default:
         return

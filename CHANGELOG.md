@@ -12,6 +12,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - 書き込み先の設定に「書き込み時に選択する」を追加しました。
 
+### Changed
+
+- 日付カラムを使用環境の言語に合わせて自動取得するよう修正しました。
+
 ### Fixed
 
 - 日本語以外の環境でも正常に動作するよう修正しました。

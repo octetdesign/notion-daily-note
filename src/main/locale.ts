@@ -18,7 +18,7 @@ import {
 } from 'date-fns/locale'
 
 /** サポートするdate-fns localeのマッピング */
-const localeMap: Record<string, Locale> = {
+const LocaleMap: Record<string, Locale> = {
   en: enUS, //	English (US)
   'zh-cn': zhCN, //	Simplified Chinese
   'zh-tw': zhTW, //	Traditional Chinese
@@ -39,5 +39,29 @@ const localeMap: Record<string, Locale> = {
 /** date-fns localeの取得 */
 export const getLocale = (language: string) => {
   // TODO: できれば動的インポートにしたい
-  return localeMap[language] || enUS
+  return LocaleMap[language] || enUS
+}
+
+/** 日付カラム名のマップ */
+const DateColumnMap: { [language: string]: string } = {
+  en: 'Date', //	English (US)
+  'zh-cn': '日期', //	Simplified Chinese
+  'zh-tw': '日期', //	Traditional Chinese
+  fr: 'Date', //	French
+  de: 'Datum', //	German
+  it: 'Data', //	Italian
+  es: 'Fecha', //	Spanish
+  ja: '日付', //	Japanese
+  ko: '날짜', //	Korean
+  ru: 'Дата', //	Russian
+  'pt-br': 'Data', //	Portuguese (Brazil)
+  tr: 'Tarih', //	Turkish
+  pl: 'Data', //	Polish
+  cs: 'Datum', //	Czech
+  hu: 'Dátum', //	Hungarian
+}
+
+/** 日付カラム名の取得 */
+export const getDateColumnName = (language: string) => {
+  return DateColumnMap[language] || 'Date'
 }
