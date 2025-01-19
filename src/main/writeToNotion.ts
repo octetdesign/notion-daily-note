@@ -83,6 +83,7 @@ export const writeToNotion = async (commandType: CommandType) => {
   ) {
     // データベースページのURLが設定されていません。
     showErrorMessage(t('The database page URL is not set.'))
+    return
   }
   // 固定ページのURL設定値チェック
   if (
@@ -92,6 +93,7 @@ export const writeToNotion = async (commandType: CommandType) => {
   ) {
     // 固定ページのURLが設定されていません。
     showErrorMessage(t('The fixed page URL is not set.'))
+    return
   }
 
   /* テキストの取得 */
