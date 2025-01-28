@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [1.0.1] - 2025-01-29
+
+### Security
+
+- 依存パッケージ katex の脆弱性警告に対応しました。（パッケージをバージョンアップ）
+
 ## [1.0.0] - 2025-01-19
 
 ### Added
