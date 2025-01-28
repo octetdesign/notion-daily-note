@@ -1,7 +1,7 @@
 {
   "name": "notion-daily-note",
   "displayName": "Notion Daily Note",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "octetdesign",
   "description": "%extension.description%",
   "icon": "images/icon.png",
@@ -196,6 +196,6 @@
   },
   "l10n": "./l10n",
   "resolutions": {
-    "katex": "^0.16.0"
+    "katex": "^0.16.21"
   }
 }
