@@ -11,7 +11,6 @@ import { getDateColumnName, getLocale } from './locale'
 import { generateContent } from './content'
 import { getLanguage } from './language'
 import { CommandType } from '../extension'
-import { es, fr, ko, zhTW } from 'date-fns/locale'
 
 /** 書き込み先ページタイプ */
 type DestinationPageType = 'DatabasePage' | 'FixedPage' | 'SelectOnWrite'
@@ -40,6 +39,13 @@ export type ApiColor =
   | 'purple_background'
   | 'pink_background'
   | 'red_background'
+
+/** URLからIDを取得 */
+const getId = (url: string | undefined) => {
+  if (!url) return ''
+  const match = url.match(/[a-f0-9]{32}/)
+  return match ? match[0] : ''
+}
 
 /**
  * 選択範囲のテキストをNotionに書き込む
@@ -159,7 +165,7 @@ export const writeToNotion = async (commandType: CommandType) => {
       // データベースページ
       case 'DatabasePage':
         // データベースのIDを取得
-        databaseId = (databasePageUrl && new URL(databasePageUrl).pathname.split('/').pop()) || ''
+        databaseId = getId(databasePageUrl)
         if (!databaseId) {
           // データベースIDの取得に失敗しました。データベースページのURLの設定を確認して下さい。
           showErrorMessage(
@@ -182,7 +188,7 @@ export const writeToNotion = async (commandType: CommandType) => {
         break
       // 固定ページ
       case 'FixedPage':
-        const fixedPageId = (fixedPageUrl && new URL(fixedPageUrl).pathname.split('/').pop()) || ''
+        const fixedPageId = getId(fixedPageUrl)
         if (!fixedPageId) {
           // 固定ページIDの取得に失敗しました。固定ページのURLの設定を確認して下さい。
           showErrorMessage(
@@ -289,6 +295,6 @@ export const writeToNotion = async (commandType: CommandType) => {
     // Notionへの同期中にエラーが発生しました：
     console.error(t('An error occurred while syncing to Notion:'), error)
     // Notionへのテキスト同期に失敗しました。
-    showErrorMessage(t('Failed to sync text to Notion.'))
+    showErrorMessage(t('Failed to sync text to Notion.') + ` (${error})`)
   }
 }
