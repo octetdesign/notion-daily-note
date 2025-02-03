@@ -6,6 +6,16 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [1.0.2] - 2025-02-03
+
+### Fixed
+
+- 設定で指定した Notion ページの URL からページ ID を取得する処理を修正しました。
+
+### Changed
+
+- Notion にテキストが書き込めなかった時に表示されるエラーメッセージにエラーの詳細を含めるようにしました。
+
 ## [1.0.1] - 2025-01-29
 
 ### Security
