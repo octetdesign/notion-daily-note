@@ -185,7 +185,7 @@
     "eslint": "^9.13.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.6.3",
-    "webpack": "^5.95.0",
+    "webpack": "^5.104.0",
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
@@ -196,6 +196,10 @@
   },
   "l10n": "./l10n",
   "resolutions": {
-    "katex": "^0.16.21"
+    "katex": "^0.16.21",
+    "flatted": "^3.4.2",
+    "serialize-javascript": "^7.0.3",
+    "js-yaml": "^4.1.1",
+    "minimatch": "^9.0.7"
   }
 }
