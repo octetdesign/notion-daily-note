@@ -4,3 +4,20 @@ node_modules
 .vscode-test/
 *.vsix
 .DS_Store
+
+# Environment variables
+.env
+.env.*
+
+# Yarn
+.yarn/
+.yarnrc.yml
+.yarn-integrity
+yarn-error.log
+yarn-debug.log*
+
+# Claude Code
+.claude/
+
+# OS
+Thumbs.db
