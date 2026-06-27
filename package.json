@@ -199,12 +199,13 @@
     "katex": "^0.16.21",
     "flatted": "^3.4.2",
     "serialize-javascript": "^7.0.5",
-    "js-yaml": "^4.1.1",
+    "js-yaml": "^4.2.0",
     "glob": "^10.5.0",
     "minimatch": "^9.0.7",
     "form-data": "^4.0.6",
     "markdown-it": "^14.2.0",
     "fast-uri": "^3.1.2",
-    "picomatch": "^2.3.2"
+    "picomatch": "^2.3.2",
+    "brace-expansion": "^2.0.3"
   }
 }
